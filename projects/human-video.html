@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Controllable Human Video Generation | Portfolio</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <a class="brand" href="../index.html">Jiang Yutong</a>
+    <div class="nav-links">
+      <a href="../index.html#projects">Projects</a>
+      <a href="training-framework.html">Training Framework</a>
+      <a href="video-erasure.html">Video Erasure</a>
+    </div>
+  </nav>
+
+  <header class="project-hero">
+    <div class="project-hero-inner">
+      <div class="breadcrumb"><a href="../index.html">Home</a> / Project 01</div>
+      <p class="eyebrow">Core Algorithm</p>
+      <h1>Multi-condition Controllable Human Video Generation</h1>
+      <p>
+        Pose-guided and reference-driven human video generation based on Wan2.2-5B
+        and Wan2.1-14B. The project supports pose sequence control, reference image
+        conditioning, first-frame conditioning, long-video generation, and multi-person control.
+      </p>
+      <div class="tag-list">
+        <span>Pose2Video</span>
+        <span>Wan2.2-5B</span>
+        <span>Wan2.1-14B</span>
+        <span>Pose-CFG</span>
+        <span>Long Video</span>
+        <span>Multi-person Control</span>
+        <span>DMD 4-step</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Overview</p>
+        <h2>Project Summary</h2>
+      </div>
+
+      <div class="two-col">
+        <div class="info-panel">
+          <h3>Goal</h3>
+          <p>
+            Build a controllable human video generation algorithm driven by multiple conditions,
+            including pose sequences, reference images, first frames, and spatial identity cues.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>My Role</h3>
+          <p>
+            Responsible for data construction, automatic annotation pipeline, Pose2Video model
+            adaptation, Pose-CFG stability strategy, long-video generation, multi-person control,
+            and DMD distillation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Pipeline</p>
+        <h2>Data and Annotation Pipeline</h2>
+        <p class="section-desc">
+          The training data is built from 9 open-source datasets and internal data. Metadata-based
+          filtering is used to select high-quality samples for training.
+        </p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>01. Large-scale Data Pool</h3>
+          <p>
+            Built a 10M-level human video data pool from OpenHumanVid, MEAD, CECSL and other
+            open-source datasets, together with internal data.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <h3>02. Metadata-based Filtering</h3>
+          <p>
+            Selected around 1.6M high-quality samples based on resolution, bitrate,
+            number of persons, and other metadata.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <h3>03. Automatic Annotation</h3>
+          <p>
+            Integrated NLF for body pose, InsightFace for face information, WiLor for hand keypoints,
+            Qwen3-VL for prompt annotation, and GroundSAM2 for person tracking and segmentation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Method</p>
+        <h2>Key Technical Designs</h2>
+      </div>
+
+      <div class="two-col">
+        <div class="info-panel">
+          <h3>Pose-CFG</h3>
+          <p>
+            Proposed a Pose-CFG strategy to enhance pose guidance, improve temporal stability,
+            and reduce motion artifacts, structural distortion, and local visual defects.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>Long Video Generation</h3>
+          <p>
+            Supported multi-segment generation and stitching, enabling about 1-minute long
+            human video generation while reducing color drift and style inconsistency.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>Multi-person Control</h3>
+          <p>
+            Used bounding boxes to represent different identities and spatial locations,
+            enabling identity-aware and position-aware multi-person control.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>DMD Distillation</h3>
+          <p>
+            Applied DMD distillation to compress the generation model to 4-step inference,
+            improving inference efficiency while maintaining generation quality.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wide">
+      <div class="section-head">
+        <p class="eyebrow">Demos</p>
+        <h2>Demo Gallery</h2>
+        <p class="section-desc">
+          Replace the placeholders below with public or synthetic demo videos. Suggested path:
+          <code>assets/videos/</code>.
+        </p>
+      </div>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Pose-guided Generation</h3>
+          <div class="video-placeholder">Replace with assets/videos/pose2video_demo.mp4</div>
+          <p class="demo-placeholder-note">Input: pose sequence + reference image. Output: controllable human video.</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>Pose-CFG Ablation</h3>
+          <div class="video-placeholder">Replace with assets/videos/pose_cfg_ablation.mp4</div>
+          <p class="demo-placeholder-note">Compare results with and without Pose-CFG.</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>Long Video Generation</h3>
+          <div class="video-placeholder">Replace with assets/videos/long_video_demo.mp4</div>
+          <p class="demo-placeholder-note">Show a short preview of about 1-minute long video generation.</p>
+        </div>
+
+        <div class="demo-card">
+          <h3>Multi-person Control</h3>
+          <div class="video-placeholder">Replace with assets/videos/multi_person_demo.mp4</div>
+          <p class="demo-placeholder-note">Show bbox-based identity and spatial control for multiple persons.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><a href="../index.html">Back to Home</a></p>
+  </footer>
+</body>
+</html>

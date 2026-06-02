@@ -1,33 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AIGC Video Generation Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Jiang Yutong | AIGC Video Generation Portfolio</title>
+  <meta name="description" content="AIGC video generation portfolio: controllable human video generation, native PyTorch distributed training framework, and video erasure optimization." />
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <h1>姜宇桐 | AIGC Video Generation Portfolio</h1>
+  <nav class="navbar">
+    <a class="brand" href="index.html">Jiang Yutong</a>
+    <div class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#projects">Projects</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </nav>
 
-  <p>
-    I am an AIGC algorithm engineer focusing on controllable human video generation,
-    video erasure, distributed training, and DMD distillation.
-  </p>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">AIGC Video Generation Portfolio</p>
+      <h1>Video Generation Algorithm Engineer</h1>
+      <p class="hero-desc">
+        Focused on controllable human video generation, Wan-series model fine-tuning,
+        DMD distillation, video erasure, and native PyTorch distributed training.
+      </p>
 
-  <h2>Projects</h2>
+      <div class="hero-actions">
+        <a class="btn primary" href="#projects">View Projects</a>
+        <a class="btn secondary" href="#contact">Contact</a>
+      </div>
 
-  <h3>1. Controllable Human Video Generation</h3>
-  <p>
-    Pose-guided and reference-driven human video generation based on Wan-series models.
-  </p>
+      <div class="quick-tags">
+        <span>Video Generation</span>
+        <span>Diffusion Models</span>
+        <span>Wan2.1 / Wan2.2</span>
+        <span>Pose2Video</span>
+        <span>DMD Distillation</span>
+        <span>PyTorch Distributed</span>
+      </div>
+    </div>
+  </header>
 
-  <h3>2. Video Erasure Model Optimization</h3>
-  <p>
-    DMD distillation from 30-step inference to 4-step inference for video erasure.
-  </p>
+  <main>
+    <section class="section" id="about">
+      <div class="section-head">
+        <p class="eyebrow">About</p>
+        <h2>Profile Summary</h2>
+      </div>
 
-  <h3>3. Native PyTorch Distributed Training Framework</h3>
-  <p>
-    A native PyTorch training framework supporting SFT, LoRA, DMD, FSDP,
-    sequence parallelism, gradient checkpointing, and EMA.
-  </p>
+      <div class="about-card">
+        <p>
+          I have one year of experience in AIGC video generation algorithm development,
+          mainly working on Wan-series video generation models, controllable human video generation,
+          model fine-tuning, DMD distillation, and distributed training infrastructure.
+        </p>
+        <p>
+          My work covers large-scale human video data construction, automatic annotation pipelines,
+          multi-condition controllable generation, long-video generation, multi-person control,
+          and native PyTorch training framework design.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-head">
+        <p class="eyebrow">Selected Projects</p>
+        <h2>Representative Work</h2>
+        <p class="section-desc">
+          The following projects correspond to my resume experience. Each project page contains
+          method overview, my contributions, and demo placeholders for later replacement.
+        </p>
+      </div>
+
+      <div class="project-grid">
+        <article class="project-card">
+          <div class="card-top">
+            <span class="index">01</span>
+            <span class="badge">Core Algorithm</span>
+          </div>
+          <h3>Multi-condition Controllable Human Video Generation</h3>
+          <p>
+            Pose-guided, reference-driven, first-frame-conditioned and multi-person controllable
+            human video generation based on Wan-series foundation models.
+          </p>
+          <ul>
+            <li>10M-level data pool and 1.6M high-quality samples</li>
+            <li>NLF / InsightFace / WiLor / Qwen3-VL / GroundSAM2 annotation pipeline</li>
+            <li>Pose-CFG, long-video generation, multi-person bbox control</li>
+            <li>DMD distillation to 4-step inference</li>
+          </ul>
+          <a class="text-link" href="projects/human-video.html">Open project →</a>
+        </article>
+
+        <article class="project-card">
+          <div class="card-top">
+            <span class="index">02</span>
+            <span class="badge">Infrastructure</span>
+          </div>
+          <h3>Native PyTorch Distributed Training and Distillation Framework</h3>
+          <p>
+            A native PyTorch framework for video generation models, supporting SFT, LoRA,
+            DMD training, FSDP, sequence parallelism, gradient checkpointing and EMA.
+          </p>
+          <ul>
+            <li>Factory and registry design</li>
+            <li>No Accelerate / DeepSpeed / Diffusers wrapper dependency</li>
+            <li>FSDP, sequence parallelism, checkpoint resume</li>
+            <li>Training-time and memory monitoring</li>
+          </ul>
+          <a class="text-link" href="projects/training-framework.html">Open project →</a>
+        </article>
+
+        <article class="project-card">
+          <div class="card-top">
+            <span class="index">03</span>
+            <span class="badge">Business Application</span>
+          </div>
+          <h3>Video Erasure Model Optimization for AIGC Cloud Editing</h3>
+          <p>
+            Optimization of an online Wan2.2-5B based video erasure model, including paired-data
+            construction redesign and 30-step to 4-step DMD distillation.
+          </p>
+          <ul>
+            <li>CV-based erasure mask generation</li>
+            <li>Single-video paired data construction</li>
+            <li>30-step to 4-step DMD distillation</li>
+            <li>Comparable erasure quality after acceleration</li>
+          </ul>
+          <a class="text-link" href="projects/video-erasure.html">Open project →</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="section-head">
+        <p class="eyebrow">Skills</p>
+        <h2>Technical Keywords</h2>
+      </div>
+
+      <div class="skill-grid">
+        <div>
+          <h3>Generative Models</h3>
+          <p>Diffusion models, video generation, Pose2Video, multi-condition control, LoRA, SFT, DMD distillation.</p>
+        </div>
+        <div>
+          <h3>Training Engineering</h3>
+          <p>PyTorch distributed training, FSDP, sequence parallelism, gradient checkpointing, EMA, checkpoint resume.</p>
+        </div>
+        <div>
+          <h3>Data Pipeline</h3>
+          <p>Large-scale video data filtering, metadata-based selection, automatic annotation, tracking and segmentation.</p>
+        </div>
+        <div>
+          <h3>Development</h3>
+          <p>Python, PyTorch, training framework design, experiment management, profiling and monitoring.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="section-head">
+        <p class="eyebrow">Contact</p>
+        <h2>Contact & Resume</h2>
+      </div>
+
+      <div class="contact-card">
+        <p>
+          Add your email, GitHub, LinkedIn, resume PDF, or QR code here after removing sensitive information.
+        </p>
+        <p class="note">
+          Recommendation: publish only public or synthetic demos. Do not upload proprietary data,
+          internal model weights, internal code, platform screenshots, or user materials.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Jiang Yutong. AIGC Video Generation Portfolio.</p>
+  </footer>
 </body>
 </html>

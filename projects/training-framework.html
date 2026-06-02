@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Native PyTorch Training Framework | Portfolio</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <a class="brand" href="../index.html">Jiang Yutong</a>
+    <div class="nav-links">
+      <a href="../index.html#projects">Projects</a>
+      <a href="human-video.html">Human Video</a>
+      <a href="video-erasure.html">Video Erasure</a>
+    </div>
+  </nav>
+
+  <header class="project-hero">
+    <div class="project-hero-inner">
+      <div class="breadcrumb"><a href="../index.html">Home</a> / Project 02</div>
+      <p class="eyebrow">Infrastructure</p>
+      <h1>Native PyTorch Distributed Training and Distillation Framework</h1>
+      <p>
+        A native PyTorch framework for large-scale video generation model training and distillation,
+        designed without relying on high-level wrappers such as Accelerate, DeepSpeed, or Diffusers.
+      </p>
+      <div class="tag-list">
+        <span>PyTorch</span>
+        <span>FSDP</span>
+        <span>Sequence Parallel</span>
+        <span>Gradient Checkpointing</span>
+        <span>EMA</span>
+        <span>SFT / LoRA / DMD</span>
+        <span>Checkpoint Resume</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Overview</p>
+        <h2>Project Summary</h2>
+      </div>
+
+      <div class="two-col">
+        <div class="info-panel">
+          <h3>Goal</h3>
+          <p>
+            Build a controllable and extensible training framework for Wan-series and other
+            video generation models, supporting SFT, LoRA, and DMD training.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>Design Principle</h3>
+          <p>
+            Implement the training system with native PyTorch to preserve low-level control over
+            training logic, distributed strategy, memory usage, checkpointing, and state recovery.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Architecture</p>
+        <h2>Framework Structure</h2>
+      </div>
+
+      <div class="two-col">
+        <div class="figure-panel">
+          <h3>Architecture Diagram</h3>
+          <div class="figure-placeholder">Replace with assets/images/framework_overview.png</div>
+          <p>
+            Suggested diagram: Dataset / Model / Optimizer / Scheduler → Registry + Factory → Trainer
+            → FSDP / Sequence Parallel / Checkpoint / EMA / DMD.
+          </p>
+        </div>
+
+        <div class="code-panel">
+          <h3>Abstract Structure</h3>
+          <pre>Dataset / Model / Optimizer / Scheduler
+                ↓
+        Registry + Factory
+                ↓
+             Trainer
+                ↓
+FSDP / Sequence Parallel / Checkpoint / EMA / DMD</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Features</p>
+        <h2>Core Capabilities</h2>
+      </div>
+
+      <div class="two-col">
+        <div class="info-panel">
+          <h3>Factory and Registry</h3>
+          <p>
+            Unified datasets, models, optimizers, and schedulers through factory functions and
+            registry mechanisms, enabling plug-and-play component management.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>Training Modes</h3>
+          <p>
+            Supported SFT, LoRA fine-tuning, and DMD distillation for Wan2.1, Wan2.2, and related
+            video generation models.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>Distributed Training</h3>
+          <p>
+            Integrated FSDP, sequence parallelism, gradient checkpointing, and EMA to support
+            stable and memory-efficient multi-GPU training.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>Monitoring and Recovery</h3>
+          <p>
+            Added training-time profiling, memory monitoring, checkpoint resume, and state recovery
+            to improve observability and robustness for long-running training tasks.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Example</p>
+        <h2>Configuration Placeholder</h2>
+      </div>
+
+      <div class="code-panel">
+        <h3>Example Config Style</h3>
+        <pre>model:
+  name: wan2_2_5b
+  train_type: dmd
+
+distributed:
+  fsdp: true
+  sequence_parallel: true
+  gradient_checkpointing: true
+
+runtime:
+  ema: true
+  resume: true
+  monitor_memory: true
+  profile_time: true</pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><a href="../index.html">Back to Home</a></p>
+  </footer>
+</body>
+</html>

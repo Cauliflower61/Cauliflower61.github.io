@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Video Erasure Model Optimization | Portfolio</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <a class="brand" href="../index.html">Jiang Yutong</a>
+    <div class="nav-links">
+      <a href="../index.html#projects">Projects</a>
+      <a href="human-video.html">Human Video</a>
+      <a href="training-framework.html">Training Framework</a>
+    </div>
+  </nav>
+
+  <header class="project-hero">
+    <div class="project-hero-inner">
+      <div class="breadcrumb"><a href="../index.html">Home</a> / Project 03</div>
+      <p class="eyebrow">Business Application</p>
+      <h1>Video Erasure Model Optimization for AIGC Cloud Editing</h1>
+      <p>
+        Optimization of an online video erasure model based on Wan2.2-5B, including paired-data
+        construction redesign and DMD distillation from 30-step inference to 4-step inference.
+      </p>
+      <div class="tag-list">
+        <span>Video Erasure</span>
+        <span>Wan2.2-5B</span>
+        <span>Paired Data</span>
+        <span>CV Mask Generation</span>
+        <span>DMD Distillation</span>
+        <span>30-step → 4-step</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Overview</p>
+        <h2>Project Summary</h2>
+      </div>
+
+      <div class="two-col">
+        <div class="info-panel">
+          <h3>Background</h3>
+          <p>
+            The video erasure model was an existing online model fine-tuned from Wan2.2-5B
+            for AIGC cloud editing scenarios.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>My Work</h3>
+          <p>
+            Responsible for paired-data construction optimization and DMD-based few-step
+            distillation to improve training data logic and inference efficiency.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Data</p>
+        <h2>Paired Data Construction</h2>
+      </div>
+
+      <div class="two-col">
+        <div class="info-panel">
+          <h3>Previous Logic</h3>
+          <p>
+            The previous pipeline relied on two videos: one video was used to construct the mask,
+            while another video was used as the ground truth. This made the paired-data logic less
+            natural for the erasure task.
+          </p>
+        </div>
+
+        <div class="info-panel">
+          <h3>Redesigned Logic</h3>
+          <p>
+            The new pipeline uses CV methods to generate erasure masks and constructs input video,
+            mask, and ground-truth pairs from a single video, improving data controllability and
+            construction stability.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="eyebrow">Distillation</p>
+        <h2>DMD Distillation</h2>
+      </div>
+
+      <div class="info-panel">
+        <h3>30-step to 4-step Inference</h3>
+        <p>
+          Applied DMD distillation to compress the original 30-step video erasure model into a
+          4-step inference model. The distilled model significantly reduces sampling steps while
+          maintaining erasure quality close to the original model.
+        </p>
+      </div>
+    </section>
+
+    <section class="section wide">
+      <div class="section-head">
+        <p class="eyebrow">Demos</p>
+        <h2>Demo Comparison</h2>
+        <p class="section-desc">
+          Replace the placeholders with public or synthetic demos. Recommended display:
+          original video, erasure mask, 30-step result, and 4-step DMD result.
+        </p>
+      </div>
+
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Original Video</h3>
+          <div class="video-placeholder">Replace with assets/videos/erasure_before.mp4</div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Erasure Mask</h3>
+          <div class="video-placeholder">Replace with assets/videos/erasure_mask.mp4</div>
+        </div>
+
+        <div class="demo-card">
+          <h3>30-step Result</h3>
+          <div class="video-placeholder">Replace with assets/videos/erasure_30step.mp4</div>
+        </div>
+
+        <div class="demo-card">
+          <h3>4-step DMD Result</h3>
+          <div class="video-placeholder">Replace with assets/videos/erasure_4step.mp4</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p><a href="../index.html">Back to Home</a></p>
+  </footer>
+</body>
+</html>
