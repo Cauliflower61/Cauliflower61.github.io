@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,126 +23,124 @@
       <div class="breadcrumb"><a href="../index.html">Home</a> / Project 02</div>
       <p class="eyebrow">Infrastructure</p>
       <h1>Native PyTorch Distributed Training and Distillation Framework</h1>
-      <p>
-        A native PyTorch framework for large-scale video generation model training and distillation,
-        designed without relying on high-level wrappers such as Accelerate, DeepSpeed, or Diffusers.
+      <p class="project-hero-desc">
+        面向视频生成模型的原生 PyTorch 分布式训练与蒸馏框架，支持 Wan2.1、Wan2.2 等模型的
+        SFT、LoRA、DMD 训练，以及 FSDP、序列并行、梯度检查点和 EMA。
       </p>
+
       <div class="tag-list">
-        <span>PyTorch</span>
+        <span>Native PyTorch</span>
         <span>FSDP</span>
         <span>Sequence Parallel</span>
         <span>Gradient Checkpointing</span>
         <span>EMA</span>
         <span>SFT / LoRA / DMD</span>
-        <span>Checkpoint Resume</span>
       </div>
     </div>
   </header>
 
   <main>
     <section class="section">
-      <div class="section-head">
+      <div class="section-title">
         <p class="eyebrow">Overview</p>
-        <h2>Project Summary</h2>
+        <h2>项目概览</h2>
       </div>
 
-      <div class="two-col">
-        <div class="info-panel">
-          <h3>Goal</h3>
+      <div class="content-grid">
+        <div class="panel">
+          <h3>Project Goal</h3>
           <p>
-            Build a controllable and extensible training framework for Wan-series and other
-            video generation models, supporting SFT, LoRA, and DMD training.
+            构建一个不依赖 Accelerate、DeepSpeed、Diffusers 等高层训练封装的原生 PyTorch 训练框架，
+            保留对训练逻辑、显存、通信和状态恢复的底层控制能力。
           </p>
         </div>
-
-        <div class="info-panel">
-          <h3>Design Principle</h3>
-          <p>
-            Implement the training system with native PyTorch to preserve low-level control over
-            training logic, distributed strategy, memory usage, checkpointing, and state recovery.
-          </p>
+        <div class="panel">
+          <h3>Supported Tasks</h3>
+          <ul>
+            <li>Wan2.1 / Wan2.2 视频生成模型训练</li>
+            <li>SFT 与 LoRA 微调</li>
+            <li>DMD 蒸馏训练</li>
+            <li>多卡分布式训练与长周期训练恢复</li>
+          </ul>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
+      <div class="section-title">
         <p class="eyebrow">Architecture</p>
-        <h2>Framework Structure</h2>
+        <h2>框架结构</h2>
       </div>
 
-      <div class="two-col">
-        <div class="figure-panel">
-          <h3>Architecture Diagram</h3>
-          <div class="figure-placeholder">Replace with assets/images/framework_overview.png</div>
+      <div class="content-grid">
+        <div class="panel">
+          <h3>Registry + Factory</h3>
           <p>
-            Suggested diagram: Dataset / Model / Optimizer / Scheduler → Registry + Factory → Trainer
-            → FSDP / Sequence Parallel / Checkpoint / EMA / DMD.
+            采用工厂函数与注册机制统一管理数据集、模型、优化器、学习率调度器等训练组件，
+            降低新模型、新任务和新训练策略的接入成本。
           </p>
         </div>
 
         <div class="code-panel">
-          <h3>Abstract Structure</h3>
+          <h3>Abstract Pipeline</h3>
           <pre>Dataset / Model / Optimizer / Scheduler
                 ↓
         Registry + Factory
                 ↓
              Trainer
                 ↓
-FSDP / Sequence Parallel / Checkpoint / EMA / DMD</pre>
+ FSDP / Sequence Parallel / Checkpoint / EMA / DMD</pre>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
-        <p class="eyebrow">Features</p>
-        <h2>Core Capabilities</h2>
+      <div class="section-title">
+        <p class="eyebrow">Capabilities</p>
+        <h2>核心能力</h2>
       </div>
 
-      <div class="two-col">
-        <div class="info-panel">
-          <h3>Factory and Registry</h3>
-          <p>
-            Unified datasets, models, optimizers, and schedulers through factory functions and
-            registry mechanisms, enabling plug-and-play component management.
-          </p>
-        </div>
-
-        <div class="info-panel">
-          <h3>Training Modes</h3>
-          <p>
-            Supported SFT, LoRA fine-tuning, and DMD distillation for Wan2.1, Wan2.2, and related
-            video generation models.
-          </p>
-        </div>
-
-        <div class="info-panel">
+      <div class="content-grid">
+        <div class="panel">
           <h3>Distributed Training</h3>
           <p>
-            Integrated FSDP, sequence parallelism, gradient checkpointing, and EMA to support
-            stable and memory-efficient multi-GPU training.
+            基于 PyTorch 原生能力实现 FSDP、梯度检查点和 EMA，并基于 yunchang 实现序列并行，
+            支持大规模视频生成模型的多卡训练与显存优化。
           </p>
         </div>
 
-        <div class="info-panel">
+        <div class="panel">
           <h3>Monitoring and Recovery</h3>
           <p>
-            Added training-time profiling, memory monitoring, checkpoint resume, and state recovery
-            to improve observability and robustness for long-running training tasks.
+            支持训练各阶段耗时统计、显存监控、日志记录、断点续训和训练状态恢复，
+            提升长周期训练任务的可观测性、稳定性和可维护性。
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3>Training Modes</h3>
+          <p>
+            统一支持 SFT、LoRA 和 DMD 蒸馏训练，使不同模型和不同训练范式可以复用同一套训练入口。
+          </p>
+        </div>
+
+        <div class="panel">
+          <h3>Engineering Control</h3>
+          <p>
+            相比高层封装框架，原生 PyTorch 实现便于调试训练细节、定位显存瓶颈、控制通信策略与状态保存逻辑。
           </p>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="section-head">
+      <div class="section-title">
         <p class="eyebrow">Example</p>
-        <h2>Configuration Placeholder</h2>
+        <h2>配置示例</h2>
       </div>
 
       <div class="code-panel">
-        <h3>Example Config Style</h3>
+        <h3>Example Config Placeholder</h3>
         <pre>model:
   name: wan2_2_5b
   train_type: dmd
