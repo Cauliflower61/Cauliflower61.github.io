@@ -1,145 +1,126 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Video Erasure Model Optimization | Portfolio</title>
-  <link rel="stylesheet" href="../style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>视频擦除模型优化 | 姜宇桐</title>
+  <link rel="stylesheet" href="../style.css">
 </head>
-
 <body>
-  <nav class="navbar">
-    <a class="brand" href="../index.html">Jiang Yutong</a>
-    <div class="nav-links">
-      <a href="../index.html#projects">Projects</a>
-      <a href="human-video.html">Human Video</a>
-      <a href="training-framework.html">Training Framework</a>
+
+<div class="app-bar">
+  <div class="app-bar-inner">
+    <a class="app-brand" href="../index.html">← 姜宇桐 · AIGC 视频生成</a>
+    <div class="app-nav">
+      <a href="human-video.html" class="nav-link">可控人物生成</a>
+      <a href="training-framework.html" class="nav-link">训练框架</a>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <header class="project-hero">
-    <div class="project-hero-inner">
-      <div class="breadcrumb"><a href="../index.html">Home</a> / Project 03</div>
-      <p class="eyebrow">Business Application</p>
-      <h1>Video Erasure Model Optimization for AIGC Cloud Editing</h1>
-      <p class="project-hero-desc">
-        面向线上 AIGC 云剪辑平台的视频擦除能力，对基于 Wan2.2-5B 微调的已有擦除模型进行
-        数据构建流程优化与 DMD 少步数蒸馏。
-      </p>
+<main class="app-main">
 
-      <div class="tag-list">
-        <span>Video Erasure</span>
-        <span>Wan2.2-5B</span>
-        <span>Paired Data</span>
-        <span>CV Mask</span>
-        <span>DMD Distillation</span>
-        <span>30-step → 4-step</span>
-      </div>
+  <div class="page-header">
+    <div class="breadcrumb"><a href="../index.html">首页</a> / 项目 03</div>
+    <h1>AIGC 云剪辑平台视频擦除模型优化</h1>
+    <p>面向线上 AIGC 云剪辑平台的视频擦除能力，对基于 Wan2.2-5B 微调的已有擦除模型进行配对数据构建流程优化与 DMD 少步数蒸馏。</p>
+    <div class="tag-row">
+      <span class="tag">Video Erasure</span>
+      <span class="tag">Wan2.2-5B</span>
+      <span class="tag">Paired Data</span>
+      <span class="tag">CV Mask</span>
+      <span class="tag">DMD Distillation</span>
+      <span class="tag">30-step → 4-step</span>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <section class="section">
-      <div class="section-title">
-        <p class="eyebrow">Overview</p>
-        <h2>项目概览</h2>
-      </div>
-
-      <div class="content-grid">
-        <div class="panel">
-          <h3>Background</h3>
-          <p>
-            该项目面向线上已有视频擦除模型，模型基于 Wan2.2-5B 微调，用于 AIGC 云剪辑平台的视频内容擦除场景。
-          </p>
-        </div>
-        <div class="panel">
-          <h3>My Work</h3>
-          <p>
-            主要负责配对数据构建流程改造，以及基于 DMD 的少步数蒸馏训练，使模型从 30 步推理压缩至 4 步推理。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-title">
-        <p class="eyebrow">Data Construction</p>
-        <h2>配对数据构建优化</h2>
-      </div>
-
-      <div class="compare-panel">
-        <table class="compare-table">
-          <thead>
-            <tr>
-              <th>版本</th>
-              <th>构建方式</th>
-              <th>问题 / 改进点</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Previous</td>
-              <td>使用两个视频，一个作为 mask 构造来源，一个作为 GT。</td>
-              <td>配对逻辑不够贴合擦除任务，数据构造稳定性和可控性不足。</td>
-            </tr>
-            <tr>
-              <td>Updated</td>
-              <td>基于 CV 方法自动生成擦除区域 mask，并从单视频构造 input / mask / GT 配对样本。</td>
-              <td>提升数据构建合理性、可控性与稳定性。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-title">
-        <p class="eyebrow">Distillation</p>
-        <h2>DMD 少步数蒸馏</h2>
-      </div>
-
+  <div class="section">
+    <div class="section-title">项目简介</div>
+    <div class="panels">
       <div class="panel">
-        <h3>30-step to 4-step</h3>
-        <p>
-          使用 DMD 蒸馏将原始 30 步视频擦除模型压缩至 4 步推理，在大幅减少采样步数的同时，
-          保持接近原模型的视频擦除质量。
-        </p>
+        <h3>背景</h3>
+        <p>面向线上已有视频擦除模型（基于 Wan2.2-5B 微调），用于 AIGC 云剪辑平台的视频内容擦除场景，优化其数据构建流程并降低推理成本。</p>
       </div>
-    </section>
-
-    <section class="section">
-      <div class="section-title">
-        <p class="eyebrow">Demo Comparison</p>
-        <h2>擦除效果对比</h2>
-        <p class="section-desc">
-          推荐展示形式：原视频、擦除 mask、30 步结果、4 步 DMD 结果。后续替换为公开或合成样例。
-        </p>
+      <div class="panel">
+        <h3>我的工作</h3>
+        <ul>
+          <li>重构配对数据构建逻辑：基于 CV 方法自动生成擦除区域 mask，从单视频构造 input / mask / GT 配对样本</li>
+          <li>DMD 蒸馏：将 30 步模型压缩至 4 步推理，保持接近原模型的擦除质量</li>
+        </ul>
       </div>
+    </div>
+  </div>
 
-      <div class="demo-grid four">
-        <div class="demo-card">
-          <h3>Original</h3>
-          <div class="video-box small">assets/videos/erasure_before.mp4</div>
-        </div>
-        <div class="demo-card">
-          <h3>Mask</h3>
-          <div class="video-box small">assets/videos/erasure_mask.mp4</div>
-        </div>
-        <div class="demo-card">
-          <h3>30-step</h3>
-          <div class="video-box small">assets/videos/erasure_30step.mp4</div>
-        </div>
-        <div class="demo-card">
-          <h3>4-step DMD</h3>
-          <div class="video-box small">assets/videos/erasure_4step.mp4</div>
+  <div class="section">
+    <div class="section-title">数据构建方案对比</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>版本</th>
+            <th>构建方式</th>
+            <th>改进</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Previous</td>
+            <td>使用两个视频，一个作为 mask 构造来源，一个作为 GT</td>
+            <td>配对逻辑不贴合擦除任务，构建稳定性不足</td>
+          </tr>
+          <tr>
+            <td>Updated</td>
+            <td>基于 CV 方法自动生成擦除区域 mask，从单视频构造 input / mask / GT</td>
+            <td>数据构建合理性、可控性与稳定性显著提升</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">擦除效果对比</div>
+    <div class="demo-grid cols-4">
+      <div class="demo-card">
+        <div class="demo-card-title">Original</div>
+        <div class="demo-card-video">
+          <video controls preload="metadata">
+            <source src="../assets/videos/erasure_before.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
-    </section>
-  </main>
+      <div class="demo-card">
+        <div class="demo-card-title">Mask</div>
+        <div class="demo-card-video">
+          <video controls preload="metadata">
+            <source src="../assets/videos/erasure_mask.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-card-title">30-step</div>
+        <div class="demo-card-video">
+          <video controls preload="metadata">
+            <source src="../assets/videos/erasure_30step.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-card-title">4-step DMD</div>
+        <div class="demo-card-video">
+          <video controls preload="metadata">
+            <source src="../assets/videos/erasure_4step.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <footer class="footer">
-    <p><a href="../index.html">Back to Home</a></p>
-  </footer>
+</main>
+
+<footer class="app-footer">
+  演示内容均为公开或合成样例，不含任何内部数据、模型权重或用户信息。
+</footer>
+
 </body>
 </html>

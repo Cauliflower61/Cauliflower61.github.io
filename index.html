@@ -1,283 +1,68 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Jiang Yutong | AIGC Video Generation Portfolio</title>
-  <meta name="description" content="AIGC video generation portfolio: controllable human video generation, DMD distillation, native PyTorch distributed training framework, and video erasure optimization." />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>姜宇桐 | AIGC 视频生成 Demo</title>
+  <meta name="description" content="AIGC 视频生成算法工程师姜宇桐的项目演示：可控人物视频生成、分布式训练框架、视频擦除优化。">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <nav class="navbar">
-    <a class="brand" href="index.html">Jiang Yutong</a>
-    <div class="nav-links">
-      <a href="#profile">Profile</a>
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
-      <a href="#contact">Contact</a>
+
+<div class="app-bar">
+  <div class="app-bar-inner">
+    <span class="app-brand">姜宇桐 · AIGC 视频生成</span>
+    <div class="app-nav">
+      <a href="mailto:635314862@qq.com" class="nav-link">联系我</a>
+      <a href="assets/resume/姜宇桐-芒果TV-无照片.pdf" download class="btn-sm">下载简历</a>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <header class="hero">
-    <div class="hero-grid">
-      <div class="hero-left">
-        <p class="eyebrow">AIGC Video Generation Portfolio</p>
-        <h1>Video Generation<br/>Algorithm Engineer</h1>
-        <p class="hero-desc">
-          1 年视频生成算法研发经验，聚焦 Wan 系列视频生成模型微调、可控人物视频生成、
-          DMD 少步数蒸馏、视频擦除与原生 PyTorch 分布式训练框架。
-        </p>
+<main class="app-main">
 
-        <div class="hero-actions">
-          <a class="btn primary" href="#projects">View Projects</a>
-          <a class="btn secondary" href="assets/resume/姜宇桐-芒果TV-无照片.pdf" download>Download Resume</a>
-        </div>
+  <div class="intro-block">
+    <h1>AIGC 视频生成算法 Demo</h1>
+    <p class="subtitle">视频生成算法工程师 · 1 年研发经验 · Wan 系列模型微调与应用（芒果TV 山海研究院）</p>
+    <a class="email-link" href="mailto:635314862@qq.com">635314862@qq.com</a>
+  </div>
 
-        <div class="quick-tags">
-          <span>Wan2.1 / Wan2.2</span>
-          <span>Pose2Video</span>
-          <span>DMD Distillation</span>
-          <span>FSDP</span>
-          <span>Sequence Parallel</span>
-          <span>Video Erasure</span>
-        </div>
+  <p class="section-label">项目演示</p>
+
+  <div class="project-list">
+    <a href="projects/human-video.html" class="project-row">
+      <span class="project-index">01</span>
+      <div class="project-info">
+        <h2>多条件驱动的可控人物视频生成</h2>
+        <p>Pose2Video · Wan2.2-5B / Wan2.1-14B · Pose-CFG · 长视频 · 多人控制 · DMD 4 步推理</p>
       </div>
+      <span class="project-arrow">→</span>
+    </a>
 
-      <div class="hero-right">
-        <div class="profile-card">
-          <div class="avatar">JY</div>
-          <h2>姜宇桐</h2>
-          <p>AIGC Algorithm Engineer</p>
-          <div class="profile-meta">
-            <span>Video Generation</span>
-            <span>Distributed Training</span>
-            <span>Model Distillation</span>
-          </div>
-        </div>
+    <a href="projects/training-framework.html" class="project-row">
+      <span class="project-index">02</span>
+      <div class="project-info">
+        <h2>原生 PyTorch 分布式训练与蒸馏框架</h2>
+        <p>FSDP · 序列并行 · SFT / LoRA / DMD · 梯度检查点 · EMA · 断点续训</p>
       </div>
-    </div>
-  </header>
+      <span class="project-arrow">→</span>
+    </a>
 
-  <main>
-    <section class="section" id="profile">
-      <div class="section-title">
-        <p class="eyebrow">Profile</p>
-        <h2>个人简介</h2>
+    <a href="projects/video-erasure.html" class="project-row">
+      <span class="project-index">03</span>
+      <div class="project-info">
+        <h2>AIGC 云剪辑平台视频擦除模型优化</h2>
+        <p>Wan2.2-5B · 配对数据重构 · CV Mask · DMD 蒸馏 30 步 → 4 步</p>
       </div>
+      <span class="project-arrow">→</span>
+    </a>
+  </div>
 
-      <div class="profile-summary">
-        <p>
-          北京理工大学控制工程硕士（985 保送），曾在 TeleAI 多模态生成研发中心实习一年，现于芒果TV 山海研究院从事 AIGC 视频生成算法研发。
-          具备从数据构建、自动化打标、模型微调、蒸馏训练到分布式训练框架建设的完整研发链路经验，
-          聚焦可控人物视频生成、少步数蒸馏与大规模分布式训练方向。
-        </p>
-      </div>
+</main>
 
-      <div class="metric-row">
-        <div class="metric-card">
-          <strong>10M+</strong>
-          <span>Human video data pool</span>
-        </div>
-        <div class="metric-card">
-          <strong>1.6M</strong>
-          <span>High-quality training samples</span>
-        </div>
-        <div class="metric-card">
-          <strong>30 → 4</strong>
-          <span>DMD inference steps</span>
-        </div>
-        <div class="metric-card">
-          <strong>Wan</strong>
-          <span>2.1 / 2.2 model family</span>
-        </div>
-      </div>
-    </section>
+<footer class="app-footer">
+  演示内容均为公开或合成样例，不含任何内部数据、模型权重或用户信息。
+</footer>
 
-    <section class="section" id="experience">
-      <div class="section-title">
-        <p class="eyebrow">Background</p>
-        <h2>工作与教育经历</h2>
-      </div>
-
-      <div class="exp-columns">
-        <div>
-          <p class="exp-group-label">Work Experience</p>
-          <div class="exp-list">
-            <div class="exp-card">
-              <div class="exp-logo logo-mango">MG</div>
-              <div class="exp-body">
-                <div class="exp-row">
-                  <strong>AIGC 算法工程师</strong>
-                  <span class="date">2025.07 — 至今</span>
-                </div>
-                <p class="exp-org">芒果TV · 山海研究院</p>
-                <p class="exp-desc">主导可控人物视频生成、分布式训练框架与视频擦除推理加速等核心方向研发。</p>
-              </div>
-            </div>
-            <div class="exp-card">
-              <div class="exp-logo logo-teleai">TAI</div>
-              <div class="exp-body">
-                <div class="exp-row">
-                  <strong>多模态算法实习生</strong>
-                  <span class="date">2024.07 — 2025.06</span>
-                </div>
-                <p class="exp-org">中国电信人工智能研究院（TeleAI）· 多模态生成研发中心</p>
-                <p class="exp-desc">多模态生成方向算法研究与工程实现。</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <p class="exp-group-label">Education</p>
-          <div class="exp-list">
-            <div class="exp-card">
-              <div class="exp-logo logo-bit">BIT</div>
-              <div class="exp-body">
-                <div class="exp-row">
-                  <strong>硕士（985 保送）</strong>
-                  <span class="date">2022.09 — 2025.06</span>
-                </div>
-                <p class="exp-org">北京理工大学</p>
-                <p class="exp-desc">控制理论与控制工程</p>
-              </div>
-            </div>
-            <div class="exp-card">
-              <div class="exp-logo logo-csu">CSU</div>
-              <div class="exp-body">
-                <div class="exp-row">
-                  <strong>学士（985）</strong>
-                  <span class="date">2018.09 — 2022.06</span>
-                </div>
-                <p class="exp-org">中南大学</p>
-                <p class="exp-desc">自动化</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="projects">
-      <div class="section-title">
-        <p class="eyebrow">Selected Projects</p>
-        <h2>代表项目</h2>
-        <p class="section-desc">
-          三个项目分别展示算法能力、训练工程能力和业务落地优化能力。项目页面中预留了视频 demo、对比实验和架构图位置。
-        </p>
-      </div>
-
-      <div class="portfolio-grid">
-        <article class="portfolio-card featured">
-          <div class="project-cover gradient-blue">
-            <span>01</span>
-          </div>
-          <div class="portfolio-body">
-            <div class="card-heading">
-              <span class="badge">Core Algorithm</span>
-              <span class="date">2025.07 - 2026.01</span>
-            </div>
-            <h3>多条件驱动的可控人物视频生成算法</h3>
-            <p>
-              基于 Wan2.2-5B 与 Wan2.1-14B 构建 Pose2Video 模型，支持姿态序列、参考图、
-              首帧、长视频生成与多人控制。
-            </p>
-            <ul>
-              <li>千万级数据池与 160 万高质量训练数据</li>
-              <li>NLF / InsightFace / WiLor / Qwen3-VL / GroundSAM2 自动化打标</li>
-              <li>Pose-CFG 稳定性优化、1 分钟长视频、多人物 bbox 控制</li>
-              <li>DMD 蒸馏至 4 步推理</li>
-            </ul>
-            <a class="project-link" href="projects/human-video.html">查看项目详情 →</a>
-          </div>
-        </article>
-
-        <article class="portfolio-card">
-          <div class="project-cover gradient-purple">
-            <span>02</span>
-          </div>
-          <div class="portfolio-body">
-            <div class="card-heading">
-              <span class="badge">Infrastructure</span>
-              <span class="date">2026.02 - 2026.03</span>
-            </div>
-            <h3>原生 PyTorch 分布式训练与蒸馏框架</h3>
-            <p>
-              面向视频生成模型构建原生 PyTorch 训练框架，支持 SFT、LoRA、DMD、FSDP、
-              序列并行、梯度检查点和 EMA。
-            </p>
-            <a class="project-link" href="projects/training-framework.html">查看项目详情 →</a>
-          </div>
-        </article>
-
-        <article class="portfolio-card">
-          <div class="project-cover gradient-orange">
-            <span>03</span>
-          </div>
-          <div class="portfolio-body">
-            <div class="card-heading">
-              <span class="badge">Application</span>
-              <span class="date">2026.04 - 2026.05</span>
-            </div>
-            <h3>AIGC 云剪辑平台视频擦除模型优化</h3>
-            <p>
-              针对线上 Wan2.2-5B 视频擦除模型，重构配对数据生成逻辑，并通过 DMD 蒸馏
-              将 30 步模型压缩至 4 步。
-            </p>
-            <a class="project-link" href="projects/video-erasure.html">查看项目详情 →</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="skills">
-      <div class="section-title">
-        <p class="eyebrow">Skills</p>
-        <h2>技术能力</h2>
-      </div>
-
-      <div class="skills-panel">
-        <div>
-          <h3>生成模型</h3>
-          <p>Diffusion Models, Video Generation, Pose2Video, Multi-condition Control, LoRA, SFT, DMD Distillation</p>
-        </div>
-        <div>
-          <h3>训练工程</h3>
-          <p>PyTorch Distributed, FSDP, Sequence Parallel, Gradient Checkpointing, EMA, Checkpoint Resume</p>
-        </div>
-        <div>
-          <h3>数据管线</h3>
-          <p>Large-scale Video Filtering, Metadata Selection, Automatic Annotation, Tracking, Segmentation</p>
-        </div>
-        <div>
-          <h3>开发能力</h3>
-          <p>Python, PyTorch, Training Framework Design, Experiment Management, Profiling, Memory Monitoring</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="contact-box">
-        <div>
-          <p class="eyebrow">Contact</p>
-          <h2>联系与简历</h2>
-          <p>目前正在积极寻找视频生成算法工程师方向的新机会，欢迎联系。</p>
-          <div class="contact-links">
-            <a class="contact-link" href="mailto:635314862@qq.com">635314862@qq.com</a>
-          </div>
-        </div>
-        <a class="btn primary" href="assets/resume/姜宇桐-芒果TV-无照片.pdf" download>下载简历</a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>
-      All demos should be reproduced with public or synthetic examples. No proprietary data, model weights, internal code, or user materials are included.
-    </p>
-  </footer>
 </body>
 </html>

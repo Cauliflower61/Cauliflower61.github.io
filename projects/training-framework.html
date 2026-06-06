@@ -1,147 +1,85 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Native PyTorch Training Framework | Portfolio</title>
-  <link rel="stylesheet" href="../style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原生 PyTorch 分布式训练框架 | 姜宇桐</title>
+  <link rel="stylesheet" href="../style.css">
 </head>
-
 <body>
-  <nav class="navbar">
-    <a class="brand" href="../index.html">Jiang Yutong</a>
-    <div class="nav-links">
-      <a href="../index.html#projects">Projects</a>
-      <a href="human-video.html">Human Video</a>
-      <a href="video-erasure.html">Video Erasure</a>
+
+<div class="app-bar">
+  <div class="app-bar-inner">
+    <a class="app-brand" href="../index.html">← 姜宇桐 · AIGC 视频生成</a>
+    <div class="app-nav">
+      <a href="human-video.html" class="nav-link">可控人物生成</a>
+      <a href="video-erasure.html" class="nav-link">视频擦除</a>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <header class="project-hero">
-    <div class="project-hero-inner">
-      <div class="breadcrumb"><a href="../index.html">Home</a> / Project 02</div>
-      <p class="eyebrow">Infrastructure</p>
-      <h1>Native PyTorch Distributed Training and Distillation Framework</h1>
-      <p class="project-hero-desc">
-        面向视频生成模型的原生 PyTorch 分布式训练与蒸馏框架，支持 Wan2.1、Wan2.2 等模型的
-        SFT、LoRA、DMD 训练，以及 FSDP、序列并行、梯度检查点和 EMA。
-      </p>
+<main class="app-main">
 
-      <div class="tag-list">
-        <span>Native PyTorch</span>
-        <span>FSDP</span>
-        <span>Sequence Parallel</span>
-        <span>Gradient Checkpointing</span>
-        <span>EMA</span>
-        <span>SFT / LoRA / DMD</span>
+  <div class="page-header">
+    <div class="breadcrumb"><a href="../index.html">首页</a> / 项目 02</div>
+    <h1>原生 PyTorch 分布式训练与蒸馏框架</h1>
+    <p>面向视频生成模型构建的原生 PyTorch 训练框架，不依赖 Accelerate、DeepSpeed、Diffusers 等高层封装，支持 SFT、LoRA、DMD、FSDP、序列并行、梯度检查点和 EMA。</p>
+    <div class="tag-row">
+      <span class="tag">Native PyTorch</span>
+      <span class="tag">FSDP</span>
+      <span class="tag">Sequence Parallel</span>
+      <span class="tag">Gradient Checkpointing</span>
+      <span class="tag">EMA</span>
+      <span class="tag">SFT / LoRA / DMD</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">框架概览</div>
+    <div class="panels">
+      <div class="panel">
+        <h3>项目目标</h3>
+        <p>构建不依赖高层封装的原生 PyTorch 训练框架，保留对训练逻辑、显存、通信和状态恢复的底层控制能力，降低新模型和新任务的接入成本。</p>
+      </div>
+      <div class="panel">
+        <h3>支持任务</h3>
+        <ul>
+          <li>Wan2.1 / Wan2.2 视频生成模型训练</li>
+          <li>SFT 与 LoRA 微调</li>
+          <li>DMD 蒸馏训练</li>
+          <li>多卡分布式训练与长周期训练恢复</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>分布式能力</h3>
+        <p>基于 PyTorch 原生 FSDP、梯度检查点和 EMA，并基于 yunchang 实现序列并行，支持大规模视频生成模型的多卡训练与显存优化。</p>
+      </div>
+      <div class="panel">
+        <h3>可观测性</h3>
+        <p>支持训练各阶段耗时统计、显存监控、日志记录、断点续训和训练状态恢复，提升长周期训练任务的可维护性。</p>
       </div>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <section class="section">
-      <div class="section-title">
-        <p class="eyebrow">Overview</p>
-        <h2>项目概览</h2>
-      </div>
+  <div class="section">
+    <div class="section-title">框架结构</div>
+    <div class="code-block">
+      <div class="code-block-header">Abstract Pipeline</div>
+      <pre>Dataset / Model / Optimizer / Scheduler
+          ↓
+  Registry + Factory
+          ↓
+       Trainer
+          ↓
+FSDP / Sequence Parallel / Checkpoint / EMA / DMD</pre>
+    </div>
+  </div>
 
-      <div class="content-grid">
-        <div class="panel">
-          <h3>Project Goal</h3>
-          <p>
-            构建一个不依赖 Accelerate、DeepSpeed、Diffusers 等高层训练封装的原生 PyTorch 训练框架，
-            保留对训练逻辑、显存、通信和状态恢复的底层控制能力。
-          </p>
-        </div>
-        <div class="panel">
-          <h3>Supported Tasks</h3>
-          <ul>
-            <li>Wan2.1 / Wan2.2 视频生成模型训练</li>
-            <li>SFT 与 LoRA 微调</li>
-            <li>DMD 蒸馏训练</li>
-            <li>多卡分布式训练与长周期训练恢复</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-title">
-        <p class="eyebrow">Architecture</p>
-        <h2>框架结构</h2>
-      </div>
-
-      <div class="content-grid">
-        <div class="panel">
-          <h3>Registry + Factory</h3>
-          <p>
-            采用工厂函数与注册机制统一管理数据集、模型、优化器、学习率调度器等训练组件，
-            降低新模型、新任务和新训练策略的接入成本。
-          </p>
-        </div>
-
-        <div class="code-panel">
-          <h3>Abstract Pipeline</h3>
-          <pre>Dataset / Model / Optimizer / Scheduler
-                ↓
-        Registry + Factory
-                ↓
-             Trainer
-                ↓
- FSDP / Sequence Parallel / Checkpoint / EMA / DMD</pre>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-title">
-        <p class="eyebrow">Capabilities</p>
-        <h2>核心能力</h2>
-      </div>
-
-      <div class="content-grid">
-        <div class="panel">
-          <h3>Distributed Training</h3>
-          <p>
-            基于 PyTorch 原生能力实现 FSDP、梯度检查点和 EMA，并基于 yunchang 实现序列并行，
-            支持大规模视频生成模型的多卡训练与显存优化。
-          </p>
-        </div>
-
-        <div class="panel">
-          <h3>Monitoring and Recovery</h3>
-          <p>
-            支持训练各阶段耗时统计、显存监控、日志记录、断点续训和训练状态恢复，
-            提升长周期训练任务的可观测性、稳定性和可维护性。
-          </p>
-        </div>
-
-        <div class="panel">
-          <h3>Training Modes</h3>
-          <p>
-            统一支持 SFT、LoRA 和 DMD 蒸馏训练，使不同模型和不同训练范式可以复用同一套训练入口。
-          </p>
-        </div>
-
-        <div class="panel">
-          <h3>Engineering Control</h3>
-          <p>
-            相比高层封装框架，原生 PyTorch 实现便于调试训练细节、定位显存瓶颈、控制通信策略与状态保存逻辑。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-title">
-        <p class="eyebrow">Example</p>
-        <h2>配置示例</h2>
-      </div>
-
-      <div class="code-panel">
-        <h3>Example Config Placeholder</h3>
-        <pre>model:
+  <div class="section">
+    <div class="section-title">配置示例</div>
+    <div class="code-block">
+      <div class="code-block-header">config.yaml</div>
+      <pre>model:
   name: wan2_2_5b
   train_type: dmd
 
@@ -155,12 +93,14 @@ runtime:
   resume: true
   monitor_memory: true
   profile_time: true</pre>
-      </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
-  <footer class="footer">
-    <p><a href="../index.html">Back to Home</a></p>
-  </footer>
+</main>
+
+<footer class="app-footer">
+  演示内容均为公开或合成样例，不含任何内部数据、模型权重或用户信息。
+</footer>
+
 </body>
 </html>
