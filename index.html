@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>视频擦除与编辑</title>
+<title>多条件驱动的可控人物视频生成</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -30,18 +30,10 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif SC',Georgia,
 }
 .nav-link:hover{color:var(--accent);}
 
+.page-header{border-bottom:1px solid var(--border);padding:48px 48px 40px;text-align:center;}
+h1{font-family:'Noto Serif SC',serif;font-size:clamp(22px,3.6vw,38px);font-weight:600;letter-spacing:-0.01em;color:var(--text);}
+
 main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
-
-.task-section{margin-bottom:80px;}
-.task-section:last-child{margin-bottom:0;}
-.section-title{
-  font-family:'Noto Serif SC',serif;font-size:clamp(26px,4vw,40px);
-  font-weight:600;letter-spacing:-0.01em;color:var(--text);
-  text-align:center;
-  padding-bottom:20px;margin-bottom:40px;
-  border-bottom:1px solid var(--border);
-}
-
 .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px 28px;}
 @media(max-width:960px){.video-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:580px){.video-grid{grid-template-columns:1fr}}
@@ -55,14 +47,14 @@ main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
 }
 .prompt-box::before{
   content:'Prompt';display:block;
-  font-family:'JetBrains Mono',monospace;font-size:14px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
   letter-spacing:0.1em;text-transform:uppercase;
   color:var(--text-dim);font-style:normal;margin-bottom:5px;
 }
 
 .viewer-wrap{
   position:relative;border-radius:8px;overflow:hidden;
-  background:#111;aspect-ratio:16/9;user-select:none;border:1px solid #2a2a2a;
+  background:#111;aspect-ratio:9/16;user-select:none;border:1px solid #2a2a2a;
   will-change:transform;
 }
 .comp-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:auto;}
@@ -77,7 +69,7 @@ main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
   border-radius:50%;background:#fff;
   display:flex;align-items:center;justify-content:center;
   z-index:11;pointer-events:none;
-  box-shadow:0 2px 10px rgba(0,0,0,0.3);will-change:transform;
+  box-shadow:0 2px 10px rgba(0,0,0,0.35);will-change:transform;
   margin-left:calc(var(--handle-size) / -2);
 }
 .c-handle svg{width:16px;height:16px;stroke:#222;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
@@ -86,8 +78,8 @@ main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
   font-size:9px;letter-spacing:0.08em;text-transform:uppercase;
   padding:3px 8px;border-radius:10px;pointer-events:none;z-index:8;
 }
-.vlabel-left {left:12px;background:rgba(26,92,255,0.18);color:rgba(140,180,255,0.95);border:1px solid rgba(26,92,255,0.3);}
-.vlabel-right{right:12px;background:rgba(0,0,0,0.45);color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.1);}
+.vlabel-gen  {left:12px;background:rgba(0,145,106,0.18);color:rgba(80,220,175,0.95);border:1px solid rgba(0,145,106,0.3);}
+.vlabel-drive{right:12px;background:rgba(224,123,0,0.18);color:rgba(255,185,90,0.95);border:1px solid rgba(224,123,0,0.3);}
 
 .ctrl-bar{display:flex;align-items:center;gap:7px;}
 .c-btn{
@@ -115,56 +107,49 @@ footer{border-top:1px solid var(--border);padding:24px 48px;text-align:center;fo
 <body>
 
 <nav class="nav-bar">
-  <span class="nav-current">视频擦除与编辑</span>
-  <a class="nav-link" href="human-video.html">可控人物视频生成 →</a>
+  <span class="nav-current">可控人物视频生成</span>
+  <a class="nav-link" href="erasure.html">视频擦除与编辑 →</a>
 </nav>
 
+<div class="page-header">
+  <h1>多条件驱动的可控人物视频生成</h1>
+</div>
 <main>
-  <section class="task-section">
-    <h1 class="section-title">视频擦除任务</h1>
-    <div class="video-grid" id="erasure-grid"></div>
-  </section>
-  <section class="task-section">
-    <h1 class="section-title">视频编辑任务</h1>
-    <div class="video-grid" id="editing-grid"></div>
-  </section>
+  <div class="video-grid" id="video-grid"></div>
 </main>
-<footer>视频擦除与编辑结果展示</footer>
+<footer>多条件驱动的可控人物视频生成结果展示</footer>
 
 <script>
-const ERASURE_DATA = [
+const DATA = [
   {
-    prompt: "Prompt 1：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure1/original.mp4",
-    output: "assets/videos/erasure/erasure1/output.mp4",
+    prompt: "Prompt 1：在此描述驱动条件与生成目标。",
+    drive:  "assets/videos/driven/driven5/drive.mp4",
+    output: "assets/videos/driven/driven5/output.mp4",
   },
   {
-    prompt: "Prompt 2：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure2/original.mp4",
-    output: "assets/videos/erasure/erasure2/output.mp4",
+    prompt: "Prompt 2：在此描述驱动条件与生成目标。",
+    drive:  "assets/videos/driven/driven6/drive.mp4",
+    output: "assets/videos/driven/driven6/output.mp4",
   },
   {
-    prompt: "Prompt 3：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure3/original.mp4",
-    output: "assets/videos/erasure/erasure3/output.mp4",
-  },
-];
-
-const EDITING_DATA = [
-  {
-    prompt: "Prompt 1：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure1/original.mp4",
-    output: "assets/videos/erasure/erasure1/output.mp4",
+    prompt: "Prompt 3：在此描述驱动条件与生成目标。",
+    drive:  "assets/videos/driven/driven7/drive.mp4",
+    output: "assets/videos/driven/driven7/output.mp4",
   },
   {
-    prompt: "Prompt 2：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure2/original.mp4",
-    output: "assets/videos/erasure/erasure2/output.mp4",
+    prompt: "Prompt 4：在此描述驱动条件与生成目标。",
+    drive:  "assets/videos/driven/driven4/drive.mp4",
+    output: "assets/videos/driven/driven4/output.mp4",
   },
   {
-    prompt: "Prompt 3：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure3/original.mp4",
-    output: "assets/videos/erasure/erasure3/output.mp4",
+    prompt: "Prompt 5：在此描述驱动条件与生成目标。",
+    drive:  "assets/videos/driven/driven3/drive.mp4",
+    output: "assets/videos/driven/driven3/output.mp4",
+  },
+  {
+    prompt: "Prompt 6：在此描述驱动条件与生成目标。",
+    drive:  "assets/videos/driven/driven1/drive.mp4",
+    output: "assets/videos/driven/driven1/output.mp4",
   },
 ];
 
@@ -185,10 +170,9 @@ function fmt(t) {
   return Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0');
 }
 
-document.getElementById('erasure-grid').append(...ERASURE_DATA.map(d => buildCard(d, '擦除后', '原始')));
-document.getElementById('editing-grid').append(...EDITING_DATA.map(d => buildCard(d, '编辑后', '原始')));
+document.getElementById('video-grid').append(...DATA.map(buildCard));
 
-function buildCard(data, leftLabel, rightLabel) {
+function buildCard(data) {
   const card = el('div', 'video-card');
 
   const pb = el('div', 'prompt-box');
@@ -197,10 +181,10 @@ function buildCard(data, leftLabel, rightLabel) {
 
   const wrap = el('div', 'viewer-wrap');
 
-  const vorig = document.createElement('video');
-  const vout  = document.createElement('video');
-  [vorig, vout].forEach((v, i) => {
-    v.src = i === 0 ? data.orig : data.output;
+  const vdrive = document.createElement('video');
+  const vout   = document.createElement('video');
+  [vdrive, vout].forEach((v, i) => {
+    v.src = i === 0 ? data.drive : data.output;
     v.preload = 'auto'; v.playsInline = true; v.muted = true; v.loop = true;
     v.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;';
     wrap.appendChild(v);
@@ -213,9 +197,9 @@ function buildCard(data, leftLabel, rightLabel) {
   const divider = el('div', 'c-divider');
   const handle  = el('div', 'c-handle');
   handle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.2" stroke-linecap="round"><polyline points="8 18 2 12 8 6"/><polyline points="16 6 22 12 16 18"/></svg>';
-  const lLeft  = el('span', 'vlabel vlabel-left');  lLeft.textContent  = leftLabel;
-  const lRight = el('span', 'vlabel vlabel-right'); lRight.textContent = rightLabel;
-  wrap.append(divider, handle, lLeft, lRight);
+  const lDrive = el('span', 'vlabel vlabel-drive'); lDrive.textContent = '驱动姿态';
+  const lGen   = el('span', 'vlabel vlabel-gen');   lGen.textContent   = '生成结果';
+  wrap.append(divider, handle, lDrive, lGen);
   card.appendChild(wrap);
 
   const bar   = el('div', 'ctrl-bar');
@@ -231,8 +215,8 @@ function buildCard(data, leftLabel, rightLabel) {
   bar.append(btnPl, btnRe, prog);
   card.appendChild(bar);
 
-  let splitPx = 0, splitFrac = 0, rafId = null, rvfcId = null, lastDrawT = -1;
-  let origReady = false, outReady = false, autoStarted = false;
+  let splitFrac = 0, splitPx = 0, rafId = null, rvfcId = null, lastDrawT = -1;
+  let driveReady = false, outReady = false, autoStarted = false;
 
   const ro = new ResizeObserver(() => {
     const w = wrap.offsetWidth, h = wrap.offsetHeight;
@@ -248,13 +232,13 @@ function buildCard(data, leftLabel, rightLabel) {
   function drawFrame() {
     const W = wrap.offsetWidth, H = wrap.offsetHeight;
     if (!W || !H) return;
-    const vW = vorig.videoWidth || W, vH = vorig.videoHeight || H;
+    const vW = vout.videoWidth || W, vH = vout.videoHeight || H;
     const scale = Math.min(W / vW, H / vH);
     const r = { x:(W-vW*scale)/2, y:(H-vH*scale)/2, w:vW*scale, h:vH*scale };
     const sx = splitPx;
     ctx.fillStyle = '#111'; ctx.fillRect(0, 0, W, H);
     ctx.save(); ctx.beginPath(); ctx.rect(sx, 0, W-sx, H); ctx.clip();
-    ctx.drawImage(vorig, r.x, r.y, r.w, r.h); ctx.restore();
+    if (driveReady) ctx.drawImage(vdrive, r.x, r.y, r.w, r.h); ctx.restore();
     ctx.save(); ctx.beginPath(); ctx.rect(0, 0, sx, H); ctx.clip();
     if (outReady) ctx.drawImage(vout, r.x, r.y, r.w, r.h); ctx.restore();
     ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 1.5;
@@ -267,54 +251,59 @@ function buildCard(data, leftLabel, rightLabel) {
   }
 
   function applyProgress(t, dur) {
-    const frac = dur > 0 ? t / dur : 0;
-    splitFrac = frac; splitPx = frac * wrap.offsetWidth;
-    updateDividerDOM(splitPx);
-    seek.value = t; seek.style.backgroundSize = (frac * 100) + '% 100%';
+    seek.value = t; seek.style.backgroundSize = (dur > 0 ? t / dur * 100 : 0) + '% 100%';
     tCur.textContent = fmt(t);
   }
 
+  let sweepRafId = null;
+  function sweepTick(now) {
+    const frac = 0.5 + 0.3 * Math.sin(now / 5000 * 2 * Math.PI);
+    splitFrac = frac; splitPx = frac * wrap.offsetWidth;
+    updateDividerDOM(splitPx); drawFrame();
+    sweepRafId = requestAnimationFrame(sweepTick);
+  }
+  sweepRafId = requestAnimationFrame(sweepTick);
+
   function onVideoFrame(_now, meta) {
-    if (meta.mediaTime !== lastDrawT) { lastDrawT = meta.mediaTime; applyProgress(meta.mediaTime, vorig.duration || 1); drawFrame(); }
-    if (!vorig.paused && !vorig.ended) rvfcId = vorig.requestVideoFrameCallback(onVideoFrame);
+    if (meta.mediaTime !== lastDrawT) { lastDrawT = meta.mediaTime; applyProgress(meta.mediaTime, vdrive.duration || 1); }
+    if (!vdrive.paused && !vdrive.ended) rvfcId = vdrive.requestVideoFrameCallback(onVideoFrame);
   }
   function rafTick() {
-    applyProgress(vorig.currentTime, vorig.duration || 1); drawFrame();
-    if (!vorig.paused && !vorig.ended) rafId = requestAnimationFrame(rafTick);
+    applyProgress(vdrive.currentTime, vdrive.duration || 1);
+    if (!vdrive.paused && !vdrive.ended) rafId = requestAnimationFrame(rafTick);
   }
   function startLoop() {
-    if (HAS_RVFC) { if (rvfcId) vorig.cancelVideoFrameCallback(rvfcId); rvfcId = vorig.requestVideoFrameCallback(onVideoFrame); }
+    if (HAS_RVFC) { if (rvfcId) vdrive.cancelVideoFrameCallback(rvfcId); rvfcId = vdrive.requestVideoFrameCallback(onVideoFrame); }
     else { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(rafTick); }
   }
   function play() {
-    if (Math.abs(vorig.currentTime - vout.currentTime) > 0.1) vout.currentTime = vorig.currentTime;
-    Promise.all([vorig.play(), vout.play()]).then(() => { btnPl.innerHTML = ICONS.pause; startLoop(); }).catch(() => {});
+    if (Math.abs(vdrive.currentTime - vout.currentTime) > 0.1) vout.currentTime = vdrive.currentTime;
+    Promise.all([vdrive.play(), vout.play()]).then(() => { btnPl.innerHTML = ICONS.pause; startLoop(); }).catch(() => {});
   }
   function pause() {
-    vorig.pause(); vout.pause(); btnPl.innerHTML = ICONS.play;
-    if (HAS_RVFC) { if (rvfcId) { vorig.cancelVideoFrameCallback(rvfcId); rvfcId = null; } }
+    vdrive.pause(); vout.pause(); btnPl.innerHTML = ICONS.play;
+    if (HAS_RVFC) { if (rvfcId) { vdrive.cancelVideoFrameCallback(rvfcId); rvfcId = null; } }
     else { cancelAnimationFrame(rafId); rafId = null; }
     drawFrame();
   }
 
-  btnPl.addEventListener('click', () => vorig.paused ? play() : pause());
-  btnRe.addEventListener('click', () => { vorig.currentTime = 0; vout.currentTime = 0; applyProgress(0, vorig.duration || 1); drawFrame(); play(); });
-  vorig.addEventListener('ended', () => { btnPl.innerHTML = ICONS.play; cancelAnimationFrame(rafId); rafId = null; if (rvfcId) { vorig.cancelVideoFrameCallback(rvfcId); rvfcId = null; } });
+  btnPl.addEventListener('click', () => vdrive.paused ? play() : pause());
+  btnRe.addEventListener('click', () => { vdrive.currentTime = 0; vout.currentTime = 0; applyProgress(0, vdrive.duration || 1); drawFrame(); play(); });
+  vdrive.addEventListener('ended', () => { btnPl.innerHTML = ICONS.play; cancelAnimationFrame(rafId); rafId = null; if (rvfcId) { vdrive.cancelVideoFrameCallback(rvfcId); rvfcId = null; } });
 
-  seek.addEventListener('pointerdown', () => {});
   seek.addEventListener('input', () => {
-    const t = parseFloat(seek.value), dur = vorig.duration || 1;
-    vorig.currentTime = t; vout.currentTime = t; applyProgress(t, dur); drawFrame();
+    const t = parseFloat(seek.value), dur = vdrive.duration || 1;
+    vdrive.currentTime = t; vout.currentTime = t; applyProgress(t, dur); drawFrame();
   });
   seek.addEventListener('pointerup', () => {
-    if (!vorig.paused) Promise.all([vorig.play(), vout.play()]).then(startLoop).catch(() => {});
+    if (!vdrive.paused) Promise.all([vdrive.play(), vout.play()]).then(startLoop).catch(() => {});
   });
 
-  vorig.addEventListener('loadedmetadata', () => { seek.max = vorig.duration; tDur.textContent = fmt(vorig.duration); applyProgress(0, vorig.duration); drawFrame(); });
+  vdrive.addEventListener('loadedmetadata', () => { seek.max = vdrive.duration; tDur.textContent = fmt(vdrive.duration); applyProgress(0, vdrive.duration); drawFrame(); });
 
-  function tryAutoPlay() { if (origReady && outReady && !autoStarted) { autoStarted = true; play(); } }
-  vorig.addEventListener('canplay', () => { origReady = true; drawFrame(); tryAutoPlay(); });
-  vout.addEventListener('canplay',  () => { outReady  = true; drawFrame(); tryAutoPlay(); });
+  function tryAutoPlay() { if (driveReady && outReady && !autoStarted) { autoStarted = true; play(); } }
+  vdrive.addEventListener('canplay', () => { driveReady = true; drawFrame(); tryAutoPlay(); });
+  vout.addEventListener('canplay',   () => { outReady   = true; drawFrame(); tryAutoPlay(); });
 
   return card;
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>视频擦除与编辑 | 姜宇桐</title>
+<title>视频擦除与编辑</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,13 +23,12 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Serif SC',Georgia,
   padding:0 40px;height:48px;
   display:flex;align-items:center;justify-content:space-between;
 }
-.nav-back{
-  font-family:'JetBrains Mono',monospace;font-size:13px;
-  color:var(--text-dim);text-decoration:none;
-  transition:color .15s;
+.nav-current{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--text);}
+.nav-link{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;
+  color:var(--text-dim);text-decoration:none;transition:color .15s;
 }
-.nav-back:hover{color:var(--accent);}
-.nav-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--text-dim);}
+.nav-link:hover{color:var(--accent);}
 
 main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
 
@@ -66,32 +65,22 @@ main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
   background:#111;aspect-ratio:16/9;user-select:none;border:1px solid #2a2a2a;
   will-change:transform;
 }
-
-.comp-canvas{
-  position:absolute;inset:0;width:100%;height:100%;display:block;
-  image-rendering:auto;
-}
-
+.comp-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:auto;}
 .c-divider{
   position:absolute;top:0;bottom:0;left:0;width:1.5px;
-  background:rgba(255,255,255,0.85);
-  transform:translateX(0px);
-  pointer-events:none;z-index:10;
-  will-change:transform;
+  background:rgba(255,255,255,0.85);transform:translateX(0px);
+  pointer-events:none;z-index:10;will-change:transform;
 }
 .c-handle{
-  position:absolute;top:50%;left:0;
-  transform:translate3d(0px,-50%,0);
+  position:absolute;top:50%;left:0;transform:translate3d(0px,-50%,0);
   width:var(--handle-size);height:var(--handle-size);
   border-radius:50%;background:#fff;
   display:flex;align-items:center;justify-content:center;
   z-index:11;pointer-events:none;
-  box-shadow:0 2px 10px rgba(0,0,0,0.3);
-  will-change:transform;
+  box-shadow:0 2px 10px rgba(0,0,0,0.3);will-change:transform;
   margin-left:calc(var(--handle-size) / -2);
 }
 .c-handle svg{width:16px;height:16px;stroke:#222;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-
 .vlabel{
   position:absolute;top:8px;font-family:'JetBrains Mono',monospace;
   font-size:9px;letter-spacing:0.08em;text-transform:uppercase;
@@ -126,8 +115,8 @@ footer{border-top:1px solid var(--border);padding:24px 48px;text-align:center;fo
 <body>
 
 <nav class="nav-bar">
-  <a class="nav-back" href="../index.html">← 返回首页</a>
-  <span class="nav-title">AIGC 视频生成 Demo</span>
+  <a class="nav-link" href="index.html">← 可控人物视频生成</a>
+  <span class="nav-current">视频擦除与编辑</span>
 </nav>
 
 <main>
@@ -140,46 +129,44 @@ footer{border-top:1px solid var(--border);padding:24px 48px;text-align:center;fo
     <div class="video-grid" id="editing-grid"></div>
   </section>
 </main>
-<footer>视频擦除与编辑结果展示 · 演示内容均为公开或合成样例，不含任何内部数据、模型权重或用户信息。</footer>
+<footer>视频擦除与编辑结果展示</footer>
 
 <script>
-// =====================================================================
 const ERASURE_DATA = [
   {
     prompt: "Prompt 1：在此描述视频场景和擦除目标。",
-    orig:   "../assets/videos/erasure/erasure1/original.mp4",
-    output: "../assets/videos/erasure/erasure1/output.mp4",
+    orig:   "assets/videos/erasure/erasure1/original.mp4",
+    output: "assets/videos/erasure/erasure1/output.mp4",
   },
   {
     prompt: "Prompt 2：在此描述视频场景和擦除目标。",
-    orig:   "../assets/videos/erasure/erasure2/original.mp4",
-    output: "../assets/videos/erasure/erasure2/output.mp4",
+    orig:   "assets/videos/erasure/erasure2/original.mp4",
+    output: "assets/videos/erasure/erasure2/output.mp4",
   },
   {
     prompt: "Prompt 3：在此描述视频场景和擦除目标。",
-    orig:   "../assets/videos/erasure/erasure3/original.mp4",
-    output: "../assets/videos/erasure/erasure3/output.mp4",
+    orig:   "assets/videos/erasure/erasure3/original.mp4",
+    output: "assets/videos/erasure/erasure3/output.mp4",
   },
 ];
 
 const EDITING_DATA = [
   {
     prompt: "Prompt 1：在此描述视频场景和擦除目标。",
-    orig:   "../assets/videos/erasure/erasure1/original.mp4",
-    output: "../assets/videos/erasure/erasure1/output.mp4",
+    orig:   "assets/videos/erasure/erasure1/original.mp4",
+    output: "assets/videos/erasure/erasure1/output.mp4",
   },
   {
     prompt: "Prompt 2：在此描述视频场景和擦除目标。",
-    orig:   "../assets/videos/erasure/erasure2/original.mp4",
-    output: "../assets/videos/erasure/erasure2/output.mp4",
+    orig:   "assets/videos/erasure/erasure2/original.mp4",
+    output: "assets/videos/erasure/erasure2/output.mp4",
   },
   {
     prompt: "Prompt 3：在此描述视频场景和擦除目标。",
-    orig:   "../assets/videos/erasure/erasure3/original.mp4",
-    output: "../assets/videos/erasure/erasure3/output.mp4",
+    orig:   "assets/videos/erasure/erasure3/original.mp4",
+    output: "assets/videos/erasure/erasure3/output.mp4",
   },
 ];
-// =====================================================================
 
 const ICONS = {
   play:    '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
@@ -214,10 +201,7 @@ function buildCard(data, leftLabel, rightLabel) {
   const vout  = document.createElement('video');
   [vorig, vout].forEach((v, i) => {
     v.src = i === 0 ? data.orig : data.output;
-    v.preload = 'auto';
-    v.playsInline = true;
-    v.muted = true;
-    v.loop = true;
+    v.preload = 'auto'; v.playsInline = true; v.muted = true; v.loop = true;
     v.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;';
     wrap.appendChild(v);
   });
@@ -247,15 +231,8 @@ function buildCard(data, leftLabel, rightLabel) {
   bar.append(btnPl, btnRe, prog);
   card.appendChild(bar);
 
-  let splitPx    = 0;
-  let splitFrac  = 0;
-  let isSeeking  = false;
-  let rafId      = null;
-  let rvfcId     = null;
-  let lastDrawT  = -1;
-  let origReady  = false;
-  let outReady   = false;
-  let autoStarted = false;
+  let splitPx = 0, splitFrac = 0, rafId = null, rvfcId = null, lastDrawT = -1;
+  let origReady = false, outReady = false, autoStarted = false;
 
   const ro = new ResizeObserver(() => {
     const w = wrap.offsetWidth, h = wrap.offsetHeight;
@@ -271,32 +248,16 @@ function buildCard(data, leftLabel, rightLabel) {
   function drawFrame() {
     const W = wrap.offsetWidth, H = wrap.offsetHeight;
     if (!W || !H) return;
-
-    function containRect(vW, vH, cW, cH) {
-      const scale = Math.min(cW / vW, cH / vH);
-      return { x:(cW-vW*scale)/2, y:(cH-vH*scale)/2, w:vW*scale, h:vH*scale };
-    }
-
-    const vW = vorig.videoWidth  || W;
-    const vH = vorig.videoHeight || H;
-    const r  = containRect(vW, vH, W, H);
+    const vW = vorig.videoWidth || W, vH = vorig.videoHeight || H;
+    const scale = Math.min(W / vW, H / vH);
+    const r = { x:(W-vW*scale)/2, y:(H-vH*scale)/2, w:vW*scale, h:vH*scale };
     const sx = splitPx;
-
-    ctx.fillStyle = '#111';
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.save();
-    ctx.beginPath(); ctx.rect(sx, 0, W - sx, H); ctx.clip();
-    ctx.drawImage(vorig, r.x, r.y, r.w, r.h);
-    ctx.restore();
-
-    ctx.save();
-    ctx.beginPath(); ctx.rect(0, 0, sx, H); ctx.clip();
-    if (outReady) ctx.drawImage(vout, r.x, r.y, r.w, r.h);
-    ctx.restore();
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.85)';
-    ctx.lineWidth   = 1.5;
+    ctx.fillStyle = '#111'; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.beginPath(); ctx.rect(sx, 0, W-sx, H); ctx.clip();
+    ctx.drawImage(vorig, r.x, r.y, r.w, r.h); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, sx, H); ctx.clip();
+    if (outReady) ctx.drawImage(vout, r.x, r.y, r.w, r.h); ctx.restore();
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
   }
 
@@ -307,106 +268,50 @@ function buildCard(data, leftLabel, rightLabel) {
 
   function applyProgress(t, dur) {
     const frac = dur > 0 ? t / dur : 0;
-    splitFrac = frac;
-    splitPx   = frac * wrap.offsetWidth;
+    splitFrac = frac; splitPx = frac * wrap.offsetWidth;
     updateDividerDOM(splitPx);
-    seek.value = t;
-    seek.style.backgroundSize = (frac * 100) + '% 100%';
+    seek.value = t; seek.style.backgroundSize = (frac * 100) + '% 100%';
     tCur.textContent = fmt(t);
   }
 
   function onVideoFrame(_now, meta) {
-    if (meta.mediaTime !== lastDrawT) {
-      lastDrawT = meta.mediaTime;
-      applyProgress(meta.mediaTime, vorig.duration || 1);
-      drawFrame();
-    }
-    if (!vorig.paused && !vorig.ended) {
-      rvfcId = vorig.requestVideoFrameCallback(onVideoFrame);
-    }
+    if (meta.mediaTime !== lastDrawT) { lastDrawT = meta.mediaTime; applyProgress(meta.mediaTime, vorig.duration || 1); drawFrame(); }
+    if (!vorig.paused && !vorig.ended) rvfcId = vorig.requestVideoFrameCallback(onVideoFrame);
   }
-
   function rafTick() {
-    const t   = vorig.currentTime;
-    const dur = vorig.duration || 1;
-    applyProgress(t, dur);
-    drawFrame();
-    if (!vorig.paused && !vorig.ended) {
-      rafId = requestAnimationFrame(rafTick);
-    }
+    applyProgress(vorig.currentTime, vorig.duration || 1); drawFrame();
+    if (!vorig.paused && !vorig.ended) rafId = requestAnimationFrame(rafTick);
   }
-
   function startLoop() {
-    if (HAS_RVFC) {
-      if (rvfcId) vorig.cancelVideoFrameCallback(rvfcId);
-      rvfcId = vorig.requestVideoFrameCallback(onVideoFrame);
-    } else {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(rafTick);
-    }
+    if (HAS_RVFC) { if (rvfcId) vorig.cancelVideoFrameCallback(rvfcId); rvfcId = vorig.requestVideoFrameCallback(onVideoFrame); }
+    else { cancelAnimationFrame(rafId); rafId = requestAnimationFrame(rafTick); }
   }
-
   function play() {
-    if (Math.abs(vorig.currentTime - vout.currentTime) > 0.1) {
-      vout.currentTime = vorig.currentTime;
-    }
-    Promise.all([vorig.play(), vout.play()]).then(() => {
-      btnPl.innerHTML = ICONS.pause;
-      startLoop();
-    }).catch(() => {});
+    if (Math.abs(vorig.currentTime - vout.currentTime) > 0.1) vout.currentTime = vorig.currentTime;
+    Promise.all([vorig.play(), vout.play()]).then(() => { btnPl.innerHTML = ICONS.pause; startLoop(); }).catch(() => {});
   }
-
   function pause() {
-    vorig.pause(); vout.pause();
-    btnPl.innerHTML = ICONS.play;
+    vorig.pause(); vout.pause(); btnPl.innerHTML = ICONS.play;
     if (HAS_RVFC) { if (rvfcId) { vorig.cancelVideoFrameCallback(rvfcId); rvfcId = null; } }
-    else           { cancelAnimationFrame(rafId); rafId = null; }
+    else { cancelAnimationFrame(rafId); rafId = null; }
     drawFrame();
   }
 
   btnPl.addEventListener('click', () => vorig.paused ? play() : pause());
-  btnRe.addEventListener('click', () => {
-    vorig.currentTime = 0; vout.currentTime = 0;
-    applyProgress(0, vorig.duration || 1);
-    drawFrame();
-    play();
-  });
-  vorig.addEventListener('ended', () => {
-    btnPl.innerHTML = ICONS.play;
-    cancelAnimationFrame(rafId); rafId = null;
-    if (rvfcId) { vorig.cancelVideoFrameCallback(rvfcId); rvfcId = null; }
-  });
+  btnRe.addEventListener('click', () => { vorig.currentTime = 0; vout.currentTime = 0; applyProgress(0, vorig.duration || 1); drawFrame(); play(); });
+  vorig.addEventListener('ended', () => { btnPl.innerHTML = ICONS.play; cancelAnimationFrame(rafId); rafId = null; if (rvfcId) { vorig.cancelVideoFrameCallback(rvfcId); rvfcId = null; } });
 
-  seek.addEventListener('pointerdown', () => { isSeeking = true; });
   seek.addEventListener('input', () => {
-    const t   = parseFloat(seek.value);
-    const dur = vorig.duration || 1;
-    vorig.currentTime = t;
-    vout.currentTime  = t;
-    applyProgress(t, dur);
-    drawFrame();
+    const t = parseFloat(seek.value), dur = vorig.duration || 1;
+    vorig.currentTime = t; vout.currentTime = t; applyProgress(t, dur); drawFrame();
   });
   seek.addEventListener('pointerup', () => {
-    isSeeking = false;
-    if (!vorig.paused) {
-      Promise.all([vorig.play(), vout.play()]).then(startLoop).catch(() => {});
-    }
+    if (!vorig.paused) Promise.all([vorig.play(), vout.play()]).then(startLoop).catch(() => {});
   });
 
-  vorig.addEventListener('loadedmetadata', () => {
-    seek.max = vorig.duration;
-    tDur.textContent = fmt(vorig.duration);
-    applyProgress(0, vorig.duration);
-    drawFrame();
-  });
+  vorig.addEventListener('loadedmetadata', () => { seek.max = vorig.duration; tDur.textContent = fmt(vorig.duration); applyProgress(0, vorig.duration); drawFrame(); });
 
-  function tryAutoPlay() {
-    if (origReady && outReady && !autoStarted) {
-      autoStarted = true;
-      play();
-    }
-  }
-
+  function tryAutoPlay() { if (origReady && outReady && !autoStarted) { autoStarted = true; play(); } }
   vorig.addEventListener('canplay', () => { origReady = true; drawFrame(); tryAutoPlay(); });
   vout.addEventListener('canplay',  () => { outReady  = true; drawFrame(); tryAutoPlay(); });
 
