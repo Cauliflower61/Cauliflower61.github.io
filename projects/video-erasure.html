@@ -1,126 +1,417 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>视频擦除模型优化 | 姜宇桐</title>
-  <link rel="stylesheet" href="../style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>视频擦除与编辑 | 姜宇桐</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fafaf8;--text:#1a1a18;--text-sub:#4a4a45;--text-dim:#8a8a82;
+  --border:#deded8;--accent:#1a5cff;--surface:#f0f0ec;--handle-size:40px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Noto Serif SC',Georgia,serif;font-size:16px;line-height:1.7;min-height:100vh;}
+
+.nav-bar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(250,250,248,0.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;height:48px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-back{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  color:var(--text-dim);text-decoration:none;
+  transition:color .15s;
+}
+.nav-back:hover{color:var(--accent);}
+.nav-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;color:var(--text-dim);}
+
+main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
+
+.task-section{margin-bottom:80px;}
+.task-section:last-child{margin-bottom:0;}
+.section-title{
+  font-family:'Noto Serif SC',serif;font-size:clamp(26px,4vw,40px);
+  font-weight:600;letter-spacing:-0.01em;color:var(--text);
+  text-align:center;
+  padding-bottom:20px;margin-bottom:40px;
+  border-bottom:1px solid var(--border);
+}
+
+.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px 28px;}
+@media(max-width:960px){.video-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.video-grid{grid-template-columns:1fr}}
+
+.video-card{display:flex;flex-direction:column;gap:10px;}
+
+.prompt-box{
+  background:#fff;border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;font-size:17px;color:var(--text-sub);line-height:1.6;
+  font-style:italic;font-family:'Noto Serif SC',Georgia,serif;min-height:66px;
+}
+.prompt-box::before{
+  content:'Prompt';display:block;
+  font-family:'JetBrains Mono',monospace;font-size:14px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-dim);font-style:normal;margin-bottom:5px;
+}
+
+.viewer-wrap{
+  position:relative;border-radius:8px;overflow:hidden;
+  background:#111;aspect-ratio:16/9;user-select:none;border:1px solid #2a2a2a;
+  will-change:transform;
+}
+
+.comp-canvas{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
+  image-rendering:auto;
+}
+
+.c-divider{
+  position:absolute;top:0;bottom:0;left:0;width:1.5px;
+  background:rgba(255,255,255,0.85);
+  transform:translateX(0px);
+  pointer-events:none;z-index:10;
+  will-change:transform;
+}
+.c-handle{
+  position:absolute;top:50%;left:0;
+  transform:translate3d(0px,-50%,0);
+  width:var(--handle-size);height:var(--handle-size);
+  border-radius:50%;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  z-index:11;pointer-events:none;
+  box-shadow:0 2px 10px rgba(0,0,0,0.3);
+  will-change:transform;
+  margin-left:calc(var(--handle-size) / -2);
+}
+.c-handle svg{width:16px;height:16px;stroke:#222;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+.vlabel{
+  position:absolute;top:8px;font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 8px;border-radius:10px;pointer-events:none;z-index:8;
+}
+.vlabel-left {left:12px;background:rgba(26,92,255,0.18);color:rgba(140,180,255,0.95);border:1px solid rgba(26,92,255,0.3);}
+.vlabel-right{right:12px;background:rgba(0,0,0,0.45);color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.1);}
+
+.ctrl-bar{display:flex;align-items:center;gap:7px;}
+.c-btn{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--border);background:#fff;color:var(--text);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:border-color .15s,background .15s;
+}
+.c-btn:hover{border-color:#aaa;background:var(--surface)}
+.c-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.c-progress{flex:1;display:flex;align-items:center;gap:6px;}
+.c-time{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-dim);min-width:28px;}
+input[type="range"].c-seek{
+  flex:1;-webkit-appearance:none;appearance:none;height:2px;border-radius:2px;
+  background:var(--border);outline:none;cursor:pointer;
+  background-image:linear-gradient(var(--accent),var(--accent));
+  background-size:0% 100%;background-repeat:no-repeat;
+}
+input[type="range"].c-seek::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;border-radius:50%;background:var(--accent);cursor:pointer;}
+input[type="range"].c-seek::-moz-range-thumb{width:10px;height:10px;border-radius:50%;background:var(--accent);border:none;}
+
+footer{border-top:1px solid var(--border);padding:24px 48px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-dim);letter-spacing:0.04em;}
+</style>
 </head>
 <body>
 
-<div class="app-bar">
-  <div class="app-bar-inner">
-    <a class="app-brand" href="../index.html">← 姜宇桐 · AIGC 视频生成</a>
-    <div class="app-nav">
-      <a href="human-video.html" class="nav-link">可控人物生成</a>
-      <a href="training-framework.html" class="nav-link">训练框架</a>
-    </div>
-  </div>
-</div>
+<nav class="nav-bar">
+  <a class="nav-back" href="../index.html">← 返回首页</a>
+  <span class="nav-title">AIGC 视频生成 Demo</span>
+</nav>
 
-<main class="app-main">
-
-  <div class="page-header">
-    <div class="breadcrumb"><a href="../index.html">首页</a> / 项目 03</div>
-    <h1>AIGC 云剪辑平台视频擦除模型优化</h1>
-    <p>面向线上 AIGC 云剪辑平台的视频擦除能力，对基于 Wan2.2-5B 微调的已有擦除模型进行配对数据构建流程优化与 DMD 少步数蒸馏。</p>
-    <div class="tag-row">
-      <span class="tag">Video Erasure</span>
-      <span class="tag">Wan2.2-5B</span>
-      <span class="tag">Paired Data</span>
-      <span class="tag">CV Mask</span>
-      <span class="tag">DMD Distillation</span>
-      <span class="tag">30-step → 4-step</span>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">项目简介</div>
-    <div class="panels">
-      <div class="panel">
-        <h3>背景</h3>
-        <p>面向线上已有视频擦除模型（基于 Wan2.2-5B 微调），用于 AIGC 云剪辑平台的视频内容擦除场景，优化其数据构建流程并降低推理成本。</p>
-      </div>
-      <div class="panel">
-        <h3>我的工作</h3>
-        <ul>
-          <li>重构配对数据构建逻辑：基于 CV 方法自动生成擦除区域 mask，从单视频构造 input / mask / GT 配对样本</li>
-          <li>DMD 蒸馏：将 30 步模型压缩至 4 步推理，保持接近原模型的擦除质量</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">数据构建方案对比</div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>版本</th>
-            <th>构建方式</th>
-            <th>改进</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Previous</td>
-            <td>使用两个视频，一个作为 mask 构造来源，一个作为 GT</td>
-            <td>配对逻辑不贴合擦除任务，构建稳定性不足</td>
-          </tr>
-          <tr>
-            <td>Updated</td>
-            <td>基于 CV 方法自动生成擦除区域 mask，从单视频构造 input / mask / GT</td>
-            <td>数据构建合理性、可控性与稳定性显著提升</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">擦除效果对比</div>
-    <div class="demo-grid cols-4">
-      <div class="demo-card">
-        <div class="demo-card-title">Original</div>
-        <div class="demo-card-video">
-          <video controls preload="metadata">
-            <source src="../assets/videos/erasure_before.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <div class="demo-card">
-        <div class="demo-card-title">Mask</div>
-        <div class="demo-card-video">
-          <video controls preload="metadata">
-            <source src="../assets/videos/erasure_mask.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <div class="demo-card">
-        <div class="demo-card-title">30-step</div>
-        <div class="demo-card-video">
-          <video controls preload="metadata">
-            <source src="../assets/videos/erasure_30step.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <div class="demo-card">
-        <div class="demo-card-title">4-step DMD</div>
-        <div class="demo-card-video">
-          <video controls preload="metadata">
-            <source src="../assets/videos/erasure_4step.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-
+<main>
+  <section class="task-section">
+    <h1 class="section-title">视频擦除任务</h1>
+    <div class="video-grid" id="erasure-grid"></div>
+  </section>
+  <section class="task-section">
+    <h1 class="section-title">视频编辑任务</h1>
+    <div class="video-grid" id="editing-grid"></div>
+  </section>
 </main>
+<footer>视频擦除与编辑结果展示 · 演示内容均为公开或合成样例，不含任何内部数据、模型权重或用户信息。</footer>
 
-<footer class="app-footer">
-  演示内容均为公开或合成样例，不含任何内部数据、模型权重或用户信息。
-</footer>
+<script>
+// =====================================================================
+const ERASURE_DATA = [
+  {
+    prompt: "Prompt 1：在此描述视频场景和擦除目标。",
+    orig:   "../assets/videos/erasure/erasure1/original.mp4",
+    output: "../assets/videos/erasure/erasure1/output.mp4",
+  },
+  {
+    prompt: "Prompt 2：在此描述视频场景和擦除目标。",
+    orig:   "../assets/videos/erasure/erasure2/original.mp4",
+    output: "../assets/videos/erasure/erasure2/output.mp4",
+  },
+  {
+    prompt: "Prompt 3：在此描述视频场景和擦除目标。",
+    orig:   "../assets/videos/erasure/erasure3/original.mp4",
+    output: "../assets/videos/erasure/erasure3/output.mp4",
+  },
+];
 
+const EDITING_DATA = [
+  {
+    prompt: "Prompt 1：在此描述视频场景和擦除目标。",
+    orig:   "../assets/videos/erasure/erasure1/original.mp4",
+    output: "../assets/videos/erasure/erasure1/output.mp4",
+  },
+  {
+    prompt: "Prompt 2：在此描述视频场景和擦除目标。",
+    orig:   "../assets/videos/erasure/erasure2/original.mp4",
+    output: "../assets/videos/erasure/erasure2/output.mp4",
+  },
+  {
+    prompt: "Prompt 3：在此描述视频场景和擦除目标。",
+    orig:   "../assets/videos/erasure/erasure3/original.mp4",
+    output: "../assets/videos/erasure/erasure3/output.mp4",
+  },
+];
+// =====================================================================
+
+const ICONS = {
+  play:    '<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+  pause:   '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>',
+  restart: '<svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>',
+};
+
+const HAS_RVFC = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+
+function el(tag, cls) {
+  const e = document.createElement(tag);
+  if (cls) cls.trim().split(/\s+/).forEach(c => e.classList.add(c));
+  return e;
+}
+function fmt(t) {
+  return Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0');
+}
+
+document.getElementById('erasure-grid').append(...ERASURE_DATA.map(d => buildCard(d, '擦除后', '原始')));
+document.getElementById('editing-grid').append(...EDITING_DATA.map(d => buildCard(d, '编辑后', '原始')));
+
+function buildCard(data, leftLabel, rightLabel) {
+  const card = el('div', 'video-card');
+
+  const pb = el('div', 'prompt-box');
+  pb.textContent = data.prompt;
+  card.appendChild(pb);
+
+  const wrap = el('div', 'viewer-wrap');
+
+  const vorig = document.createElement('video');
+  const vout  = document.createElement('video');
+  [vorig, vout].forEach((v, i) => {
+    v.src = i === 0 ? data.orig : data.output;
+    v.preload = 'auto';
+    v.playsInline = true;
+    v.muted = true;
+    v.loop = true;
+    v.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;';
+    wrap.appendChild(v);
+  });
+
+  const canvas = el('canvas', 'comp-canvas');
+  const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+  wrap.appendChild(canvas);
+
+  const divider = el('div', 'c-divider');
+  const handle  = el('div', 'c-handle');
+  handle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.2" stroke-linecap="round"><polyline points="8 18 2 12 8 6"/><polyline points="16 6 22 12 16 18"/></svg>';
+  const lLeft  = el('span', 'vlabel vlabel-left');  lLeft.textContent  = leftLabel;
+  const lRight = el('span', 'vlabel vlabel-right'); lRight.textContent = rightLabel;
+  wrap.append(divider, handle, lLeft, lRight);
+  card.appendChild(wrap);
+
+  const bar   = el('div', 'ctrl-bar');
+  const btnPl = el('button', 'c-btn'); btnPl.innerHTML = ICONS.play;
+  const btnRe = el('button', 'c-btn'); btnRe.innerHTML = ICONS.restart;
+  const prog  = el('div', 'c-progress');
+  const tCur  = el('span', 'c-time'); tCur.textContent = '0:00';
+  const seek  = document.createElement('input');
+  seek.type = 'range'; seek.className = 'c-seek';
+  seek.min = 0; seek.max = 100; seek.value = 0; seek.step = 0.01;
+  const tDur = el('span', 'c-time'); tDur.textContent = '0:00';
+  prog.append(tCur, seek, tDur);
+  bar.append(btnPl, btnRe, prog);
+  card.appendChild(bar);
+
+  let splitPx    = 0;
+  let splitFrac  = 0;
+  let isSeeking  = false;
+  let rafId      = null;
+  let rvfcId     = null;
+  let lastDrawT  = -1;
+  let origReady  = false;
+  let outReady   = false;
+  let autoStarted = false;
+
+  const ro = new ResizeObserver(() => {
+    const w = wrap.offsetWidth, h = wrap.offsetHeight;
+    canvas.width  = Math.round(w * devicePixelRatio);
+    canvas.height = Math.round(h * devicePixelRatio);
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    splitPx = splitFrac * w;
+    updateDividerDOM(splitPx);
+    drawFrame();
+  });
+  ro.observe(wrap);
+
+  function drawFrame() {
+    const W = wrap.offsetWidth, H = wrap.offsetHeight;
+    if (!W || !H) return;
+
+    function containRect(vW, vH, cW, cH) {
+      const scale = Math.min(cW / vW, cH / vH);
+      return { x:(cW-vW*scale)/2, y:(cH-vH*scale)/2, w:vW*scale, h:vH*scale };
+    }
+
+    const vW = vorig.videoWidth  || W;
+    const vH = vorig.videoHeight || H;
+    const r  = containRect(vW, vH, W, H);
+    const sx = splitPx;
+
+    ctx.fillStyle = '#111';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.save();
+    ctx.beginPath(); ctx.rect(sx, 0, W - sx, H); ctx.clip();
+    ctx.drawImage(vorig, r.x, r.y, r.w, r.h);
+    ctx.restore();
+
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, sx, H); ctx.clip();
+    if (outReady) ctx.drawImage(vout, r.x, r.y, r.w, r.h);
+    ctx.restore();
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+    ctx.lineWidth   = 1.5;
+    ctx.beginPath(); ctx.moveTo(sx, 0); ctx.lineTo(sx, H); ctx.stroke();
+  }
+
+  function updateDividerDOM(px) {
+    divider.style.transform = `translateX(${px}px)`;
+    handle.style.transform  = `translate3d(${px}px,-50%,0)`;
+  }
+
+  function applyProgress(t, dur) {
+    const frac = dur > 0 ? t / dur : 0;
+    splitFrac = frac;
+    splitPx   = frac * wrap.offsetWidth;
+    updateDividerDOM(splitPx);
+    seek.value = t;
+    seek.style.backgroundSize = (frac * 100) + '% 100%';
+    tCur.textContent = fmt(t);
+  }
+
+  function onVideoFrame(_now, meta) {
+    if (meta.mediaTime !== lastDrawT) {
+      lastDrawT = meta.mediaTime;
+      applyProgress(meta.mediaTime, vorig.duration || 1);
+      drawFrame();
+    }
+    if (!vorig.paused && !vorig.ended) {
+      rvfcId = vorig.requestVideoFrameCallback(onVideoFrame);
+    }
+  }
+
+  function rafTick() {
+    const t   = vorig.currentTime;
+    const dur = vorig.duration || 1;
+    applyProgress(t, dur);
+    drawFrame();
+    if (!vorig.paused && !vorig.ended) {
+      rafId = requestAnimationFrame(rafTick);
+    }
+  }
+
+  function startLoop() {
+    if (HAS_RVFC) {
+      if (rvfcId) vorig.cancelVideoFrameCallback(rvfcId);
+      rvfcId = vorig.requestVideoFrameCallback(onVideoFrame);
+    } else {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(rafTick);
+    }
+  }
+
+  function play() {
+    if (Math.abs(vorig.currentTime - vout.currentTime) > 0.1) {
+      vout.currentTime = vorig.currentTime;
+    }
+    Promise.all([vorig.play(), vout.play()]).then(() => {
+      btnPl.innerHTML = ICONS.pause;
+      startLoop();
+    }).catch(() => {});
+  }
+
+  function pause() {
+    vorig.pause(); vout.pause();
+    btnPl.innerHTML = ICONS.play;
+    if (HAS_RVFC) { if (rvfcId) { vorig.cancelVideoFrameCallback(rvfcId); rvfcId = null; } }
+    else           { cancelAnimationFrame(rafId); rafId = null; }
+    drawFrame();
+  }
+
+  btnPl.addEventListener('click', () => vorig.paused ? play() : pause());
+  btnRe.addEventListener('click', () => {
+    vorig.currentTime = 0; vout.currentTime = 0;
+    applyProgress(0, vorig.duration || 1);
+    drawFrame();
+    play();
+  });
+  vorig.addEventListener('ended', () => {
+    btnPl.innerHTML = ICONS.play;
+    cancelAnimationFrame(rafId); rafId = null;
+    if (rvfcId) { vorig.cancelVideoFrameCallback(rvfcId); rvfcId = null; }
+  });
+
+  seek.addEventListener('pointerdown', () => { isSeeking = true; });
+  seek.addEventListener('input', () => {
+    const t   = parseFloat(seek.value);
+    const dur = vorig.duration || 1;
+    vorig.currentTime = t;
+    vout.currentTime  = t;
+    applyProgress(t, dur);
+    drawFrame();
+  });
+  seek.addEventListener('pointerup', () => {
+    isSeeking = false;
+    if (!vorig.paused) {
+      Promise.all([vorig.play(), vout.play()]).then(startLoop).catch(() => {});
+    }
+  });
+
+  vorig.addEventListener('loadedmetadata', () => {
+    seek.max = vorig.duration;
+    tDur.textContent = fmt(vorig.duration);
+    applyProgress(0, vorig.duration);
+    drawFrame();
+  });
+
+  function tryAutoPlay() {
+    if (origReady && outReady && !autoStarted) {
+      autoStarted = true;
+      play();
+    }
+  }
+
+  vorig.addEventListener('canplay', () => { origReady = true; drawFrame(); tryAutoPlay(); });
+  vout.addEventListener('canplay',  () => { outReady  = true; drawFrame(); tryAutoPlay(); });
+
+  return card;
+}
+</script>
 </body>
 </html>
