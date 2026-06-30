@@ -40,18 +40,6 @@ main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
 
 .video-card{display:flex;flex-direction:column;gap:10px;}
 
-.prompt-box{
-  background:#fff;border:1px solid var(--border);border-radius:8px;
-  padding:12px 14px;font-size:17px;color:var(--text-sub);line-height:1.6;
-  font-style:italic;font-family:'Noto Serif SC',Georgia,serif;min-height:66px;
-}
-.prompt-box::before{
-  content:'Prompt';display:block;
-  font-family:'JetBrains Mono',monospace;font-size:11px;
-  letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--text-dim);font-style:normal;margin-bottom:5px;
-}
-
 .viewer-wrap{
   position:relative;border-radius:8px;overflow:hidden;
   background:#111;aspect-ratio:9/16;user-select:none;border:1px solid #2a2a2a;
@@ -122,32 +110,26 @@ footer{border-top:1px solid var(--border);padding:24px 48px;text-align:center;fo
 <script>
 const DATA = [
   {
-    prompt: "Prompt 1：在此描述驱动条件与生成目标。",
     drive:  "assets/videos/driven/driven5/drive.mp4",
     output: "assets/videos/driven/driven5/output.mp4",
   },
   {
-    prompt: "Prompt 2：在此描述驱动条件与生成目标。",
     drive:  "assets/videos/driven/driven6/drive.mp4",
     output: "assets/videos/driven/driven6/output.mp4",
   },
   {
-    prompt: "Prompt 3：在此描述驱动条件与生成目标。",
     drive:  "assets/videos/driven/driven7/drive.mp4",
     output: "assets/videos/driven/driven7/output.mp4",
   },
   {
-    prompt: "Prompt 4：在此描述驱动条件与生成目标。",
     drive:  "assets/videos/driven/driven4/drive.mp4",
     output: "assets/videos/driven/driven4/output.mp4",
   },
   {
-    prompt: "Prompt 5：在此描述驱动条件与生成目标。",
     drive:  "assets/videos/driven/driven3/drive.mp4",
     output: "assets/videos/driven/driven3/output.mp4",
   },
   {
-    prompt: "Prompt 6：在此描述驱动条件与生成目标。",
     drive:  "assets/videos/driven/driven1/drive.mp4",
     output: "assets/videos/driven/driven1/output.mp4",
   },
@@ -174,10 +156,6 @@ document.getElementById('video-grid').append(...DATA.map(buildCard));
 
 function buildCard(data) {
   const card = el('div', 'video-card');
-
-  const pb = el('div', 'prompt-box');
-  pb.textContent = data.prompt;
-  card.appendChild(pb);
 
   const wrap = el('div', 'viewer-wrap');
 

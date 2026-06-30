@@ -42,8 +42,7 @@ main{max-width:1240px;margin:0 auto;padding:56px 40px 80px;}
   border-bottom:1px solid var(--border);
 }
 
-.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px 28px;}
-@media(max-width:960px){.video-grid{grid-template-columns:repeat(2,1fr)}}
+.video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:48px 28px;}
 @media(max-width:580px){.video-grid{grid-template-columns:1fr}}
 
 .video-card{display:flex;flex-direction:column;gap:10px;}
@@ -134,37 +133,57 @@ footer{border-top:1px solid var(--border);padding:24px 48px;text-align:center;fo
 <script>
 const ERASURE_DATA = [
   {
-    prompt: "Prompt 1：在此描述视频场景和擦除目标。",
+    prompt: "Prompt 1：去除掉右边的男人。",
     orig:   "assets/videos/erasure/erasure1/original.mp4",
     output: "assets/videos/erasure/erasure1/output.mp4",
   },
   {
-    prompt: "Prompt 2：在此描述视频场景和擦除目标。",
+    prompt: "Prompt 2：去除掉视频中人物的耳机。",
     orig:   "assets/videos/erasure/erasure2/original.mp4",
     output: "assets/videos/erasure/erasure2/output.mp4",
   },
   {
-    prompt: "Prompt 3：在此描述视频场景和擦除目标。",
+    prompt: "Prompt 3：去除掉视频中的字幕。",
     orig:   "assets/videos/erasure/erasure3/original.mp4",
     output: "assets/videos/erasure/erasure3/output.mp4",
+  },
+  {
+    prompt: "Prompt 4：去除掉视频中人物额头的标记。",
+    orig:   "assets/videos/erasure/erasure4/original.mp4",
+    output: "assets/videos/erasure/erasure4/output.mp4",
+  },
+  {
+    prompt: "Prompt 5：去除掉人物手臂上的纹身。",
+    orig:   "assets/videos/erasure/erasure5/original.mp4",
+    output: "assets/videos/erasure/erasure5/output.mp4",
+  },
+  {
+    prompt: "Prompt 6：去除掉人物嘴角的痣。",
+    orig:   "assets/videos/erasure/erasure6/original.mp4",
+    output: "assets/videos/erasure/erasure6/output.mp4",
   },
 ];
 
 const EDITING_DATA = [
   {
-    prompt: "Prompt 1：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure1/original.mp4",
-    output: "assets/videos/erasure/erasure1/output.mp4",
+    prompt: "Prompt 1：将“上海”改为“北京”。",
+    orig:   "assets/videos/edit/edit1/original.mp4",
+    output: "assets/videos/edit/edit1/output.mp4",
   },
   {
-    prompt: "Prompt 2：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure2/original.mp4",
-    output: "assets/videos/erasure/erasure2/output.mp4",
+    prompt: "Prompt 2：给右侧的男人加上安全带。",
+    orig:   "assets/videos/edit/edit2/original.mp4",
+    output: "assets/videos/edit/edit2/output.mp4",
   },
   {
-    prompt: "Prompt 3：在此描述视频场景和擦除目标。",
-    orig:   "assets/videos/erasure/erasure3/original.mp4",
-    output: "assets/videos/erasure/erasure3/output.mp4",
+    prompt: "Prompt 3：将白色花状首饰改为蓝色宝石状首饰。",
+    orig:   "assets/videos/edit/edit3/original.mp4",
+    output: "assets/videos/edit/edit3/output.mp4",
+  },
+  {
+    prompt: "Prompt 4：将视频中人物的头发变为直发。",
+    orig:   "assets/videos/edit/edit4/original.mp4",
+    output: "assets/videos/edit/edit4/output.mp4",
   },
 ];
 
